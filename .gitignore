@@ -1,0 +1,26 @@
+# Secrets & credentials
+.env
+.env.*
+!.env.example
+openclaw.json
+openclaw.json.bak*
+credentials/
+agents/*/agent/auth-profiles.json
+devices/paired.json
+telegram/
+
+# Runtime data (backed up separately)
+agents/*/sessions/
+memory/*.sqlite
+browser/
+media/inbound/
+.openclaw/
+subagents/
+
+# System
+*.log
+__pycache__/
+node_modules/
+.DS_Store
+*.bak
+*.bak.*

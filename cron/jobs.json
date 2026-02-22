@@ -1,0 +1,197 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "4007e755-40a9-48b7-a861-235bef2e7a99",
+      "agentId": "slavy",
+      "name": "Morning Briefing",
+      "enabled": true,
+      "createdAtMs": 1770686907074,
+      "updatedAtMs": 1771758050277,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "tz": "America/Sao_Paulo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Сформируй утренний briefing строго по HEARTBEAT.md: 1) Top tasks today — query Notion Team Tasks (дедлайн сегодня или просрочено, Status ≠ Done/Cancelled, см. team-config.md) + личные задачи из tasks.md, 2) Money/business status (если данных нет — пропусти блок), 3) Product/marketing status, 4) Energy/body/sport reminder, 5) Risk of the day. Формат компактный, до 200 слов. Без дополнительных блоков."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "329069903"
+      },
+      "state": {
+        "nextRunAtMs": 1771844400000,
+        "lastRunAtMs": 1771758000006,
+        "lastStatus": "ok",
+        "lastDurationMs": 50271
+      }
+    },
+    {
+      "id": "ad505774-de80-4dba-b564-f7e3975c7a59",
+      "agentId": "slavy",
+      "name": "Личное напоминание: продление пребывания (1 марта)",
+      "enabled": true,
+      "deleteAfterRun": true,
+      "createdAtMs": 1771371265711,
+      "updatedAtMs": 1771371265711,
+      "schedule": {
+        "kind": "at",
+        "at": "2026-03-01T13:00:00.000Z"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Отправь через личный Telegram-аккаунт (yarskiy_assist) пользователю yarskiy сообщение: \"Напоминание: проверь сроки и подачу на продление пребывания в Бразилии.\" Используй команду /home/ubuntu/telegram-mcp/send_from_user.sh \"yarskiy\" \"...\". После отправки кратко подтверди в основной чат, что напоминание отправлено.",
+        "timeoutSeconds": 120
+      },
+      "delivery": {
+        "mode": "announce"
+      },
+      "state": {
+        "nextRunAtMs": 1772370000000
+      }
+    },
+    {
+      "id": "ea7a5089-b0df-4298-8c8b-5d159d18074a",
+      "agentId": "slavy",
+      "name": "Daily Schedule 07:00",
+      "description": "Ежедневная сводка расписания на сегодня",
+      "enabled": true,
+      "createdAtMs": 1771550216729,
+      "updatedAtMs": 1771754411180,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 7 * * *",
+        "tz": "America/Sao_Paulo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Сформируй утреннюю сводку календаря на сегодня (таймзона America/Sao_Paulo): 1) дата и день недели, 2) список встреч по порядку (время + короткое название), 3) свободные окна между встречами, 4) если встреч нет — напиши, что день свободен. Кратко, без лишнего текста."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "329069903"
+      },
+      "state": {
+        "nextRunAtMs": 1771840800000,
+        "lastRunAtMs": 1771754400005,
+        "lastStatus": "ok",
+        "lastDurationMs": 11175
+      }
+    },
+    {
+      "id": "e5cd1906-4e2a-42ef-bed8-c1685031d868",
+      "agentId": "slavy",
+      "name": "Напоминание: отчетность в ОРД",
+      "enabled": true,
+      "deleteAfterRun": true,
+      "createdAtMs": 1771632396822,
+      "updatedAtMs": 1771632396822,
+      "schedule": {
+        "kind": "at",
+        "at": "2026-02-24T12:00:00.000Z"
+      },
+      "sessionTarget": "main",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "systemEvent",
+        "text": "Напоминание: сегодня вторник — проверь и сдай отчетность в ОРД."
+      },
+      "state": {
+        "nextRunAtMs": 1771934400000
+      }
+    },
+    {
+      "id": "b1a2c3d4-task-daily-digest-001",
+      "agentId": "slavy",
+      "name": "Daily Task Digest",
+      "description": "Ежедневный отчет по задачам из Notion Team Tasks: просроченные, дедлайн сегодня/завтра, inbox",
+      "enabled": true,
+      "createdAtMs": 1771718400000,
+      "updatedAtMs": 1771718400000,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * 1-5",
+        "tz": "America/Sao_Paulo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Сформируй ежедневный отчет по задачам из Notion (Team Tasks, см. team-config.md). Структура: 1) ПРОСРОЧЕНО — задачи где Deadline < сегодня, Status не Done/Cancelled. По каждой: [приоритет] задача — @ответственный — сколько дней просрочено. 2) ДЕДЛАЙН СЕГОДНЯ — задачи с дедлайном сегодня. 3) ДЕДЛАЙН ЗАВТРА. 4) INBOX — сколько задач со статусом Inbox (без ответственного/дедлайна). Если просроченных нет — напиши 'Все задачи в графике'. Формат компактный, до 250 слов."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "329069903"
+      },
+      "state": {
+        "nextRunAtMs": 1771848000000
+      }
+    },
+    {
+      "id": "c2b3a4d5-task-weekly-report-001",
+      "agentId": "slavy",
+      "name": "Weekly Task Report",
+      "description": "Еженедельный отчет: выполнено, открытые по ответственным, просроченные, velocity",
+      "enabled": true,
+      "createdAtMs": 1771718400000,
+      "updatedAtMs": 1771718400000,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * 1",
+        "tz": "America/Sao_Paulo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Сформируй еженедельный отчет по задачам из Notion (Team Tasks, см. team-config.md). Структура: 1) ЗАКРЫТО ЗА НЕДЕЛЮ — задачи Done за последние 7 дней. 2) ОТКРЫТЫЕ — все задачи в статусах Todo/In Progress/Blocked, сгруппированные по ответственному. 3) ПРОСРОЧЕНО — сколько задач просрочено, самая старая. 4) INBOX — сколько нераспределенных. 5) VELOCITY — создано vs закрыто за неделю. Формат: компактные списки по секциям, до 300 слов."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "329069903"
+      },
+      "state": {
+        "nextRunAtMs": 1771844400000
+      }
+    },
+    {
+      "id": "d3c4b5a6-task-nudge-runner-001",
+      "agentId": "slavy",
+      "name": "Task Reminder Runner",
+      "description": "Проверяет дедлайны в Notion и отправляет напоминания по эскалации из HEARTBEAT.md",
+      "enabled": true,
+      "createdAtMs": 1771718400000,
+      "updatedAtMs": 1771718400000,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 11,16 * * 1-5",
+        "tz": "America/Sao_Paulo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Проверь задачи в Notion (Team Tasks, см. team-config.md) и отправь напоминания строго по Reminder Nudge Policy из HEARTBEAT.md. Для каждой задачи с дедлайном проверь условия эскалации. Резолви ответственного через team-registry.json → telegramUsername. Для soft/urgent nudge — тегни @username в SourceChat группе. Для critical (просрочено 2+ дня) — отправь DM через /home/ubuntu/telegram-mcp/send_from_user.sh. Обнови LastNudgeDate и NudgeCount в Notion после каждого напоминания. Не отправляй больше 1 nudge одному человеку за 4 часа (проверь LastNudgeDate). Максимум 10 DM за один запуск.",
+        "timeoutSeconds": 180
+      },
+      "delivery": {
+        "mode": "silent"
+      },
+      "state": {
+        "nextRunAtMs": 1771855200000
+      }
+    }
+  ]
+}
