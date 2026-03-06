@@ -589,6 +589,64 @@
             box-shadow: 0 0 50px rgba(0, 200, 212, 0.5);
         }
 
+        /* === NEO EASTER EGG === */
+        .neo-overlay {
+            position: fixed; inset: 0; z-index: 500;
+            background: #000;
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column;
+        }
+        .neo-overlay.active { display: flex; }
+        .neo-stage {
+            width: 700px; max-width: 95vw; height: 340px;
+            position: relative; overflow: hidden;
+            font-family: 'Share Tech Mono', monospace;
+            border: 1px solid rgba(0, 200, 212, 0.15);
+            background: #000;
+        }
+        .neo-hint {
+            color: #39ff14; font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem; margin-top: 16px; letter-spacing: 0.1em;
+            opacity: 0.5;
+        }
+        .neo-char {
+            position: absolute;
+            font-size: 11px;
+            line-height: 1;
+            white-space: pre;
+            color: #39ff14;
+            text-shadow: 0 0 8px rgba(57, 255, 20, 0.6);
+            transition: none;
+        }
+        .neo-char.magenta {
+            color: var(--magenta);
+            text-shadow: 0 0 8px rgba(255, 45, 123, 0.6);
+        }
+        .neo-char.cyan {
+            color: var(--cyan);
+            text-shadow: 0 0 8px rgba(0, 200, 212, 0.6);
+        }
+        .neo-bullet {
+            position: absolute;
+            color: #fff;
+            font-size: 10px;
+            text-shadow: 0 0 6px #fff;
+        }
+        .neo-text {
+            position: absolute;
+            bottom: 16px; left: 0; right: 0;
+            text-align: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: #39ff14;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+            letter-spacing: 0.15em;
+        }
+        .neo-rain {
+            position: absolute; inset: 0;
+            pointer-events: none; opacity: 0.15;
+        }
+
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
             .nav { gap: 12px; padding: 0 16px; }
@@ -953,6 +1011,14 @@
         </footer>
     </div>
 
+    <!-- NEO EASTER EGG -->
+    <div class="neo-overlay" id="neoOverlay">
+        <div class="neo-stage" id="neoStage">
+            <canvas class="neo-rain" id="neoRain"></canvas>
+        </div>
+        <div class="neo-hint">[ press ESC to exit the matrix ]</div>
+    </div>
+
     <!-- CHAT WIDGET -->
     <a href="https://t.me/iaroslav" class="chat-widget" target="_blank">&#128172;</a>
 
@@ -996,6 +1062,252 @@
             }, 60);
         });
     });
+
+    // === NEO EASTER EGG — type "neo" to trigger ===
+    (function() {
+        let typed = '';
+        const overlay = document.getElementById('neoOverlay');
+        const stage = document.getElementById('neoStage');
+        const rainCanvas = document.getElementById('neoRain');
+        let running = false;
+
+        document.addEventListener('keypress', e => {
+            if (running) return;
+            typed += e.key.toLowerCase();
+            if (typed.length > 10) typed = typed.slice(-10);
+            if (typed.includes('neo')) { typed = ''; startNeo(); }
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && running) stopNeo();
+        });
+        overlay.addEventListener('click', () => { if (running) stopNeo(); });
+
+        const NEO_STAND = [
+            '   O   ',
+            '  /|\\  ',
+            '  / \\  '
+        ];
+        const NEO_DODGE = [
+            '       ',
+            ' __O__ ',
+            '  / \\  '
+        ];
+        const NEO_DODGE_DEEP = [
+            '       ',
+            '___O___',
+            '  / \\  '
+        ];
+        const NEO_GRAB = [
+            '   O / ',
+            '  /|/  ',
+            '  / \\  '
+        ];
+        const NEO_CLAW = [
+            '  (\\_  ',
+            '  (  > ',
+            '  (/   '
+        ];
+        const NEO_FIGHT1 = [
+            '   O (\\_',
+            '  /|>(  >',
+            '  / \\ (/  '
+        ];
+        const NEO_FIGHT2 = [
+            '   O    ',
+            '  /|\\(\\_',
+            '  / >(/ '
+        ];
+        const NEO_SWING = [
+            '   O--(\\_',
+            '  /|   (/>',
+            '  / \\  (/ '
+        ];
+        const MONKEY_STAND = [
+            '  @  ',
+            ' /|\\ ',
+            ' / \\ '
+        ];
+        const MONKEY_HIT = [
+            '  @  ',
+            ' \\|/ ',
+            ' / \\ '
+        ];
+        const MONKEY_DOWN = [
+            '      ',
+            ' _@_  ',
+            ' / \\ '
+        ];
+        const MONKEY_DEAD = [
+            '      ',
+            '      ',
+            ' _@__ '
+        ];
+
+        function drawAscii(arr, x, y, cls) {
+            const el = document.createElement('div');
+            el.className = 'neo-char' + (cls ? ' ' + cls : '');
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            el.textContent = arr.join('\n');
+            stage.appendChild(el);
+            return el;
+        }
+        function drawText(text) {
+            const el = document.createElement('div');
+            el.className = 'neo-text';
+            el.textContent = text;
+            stage.appendChild(el);
+            return el;
+        }
+        function clearStage() {
+            stage.querySelectorAll('.neo-char, .neo-text, .neo-bullet').forEach(e => e.remove());
+        }
+
+        function startRain() {
+            const ctx = rainCanvas.getContext('2d');
+            const w = rainCanvas.width = stage.offsetWidth;
+            const h = rainCanvas.height = stage.offsetHeight;
+            const cols = Math.floor(w / 14);
+            const drops = Array(cols).fill(0).map(() => Math.random() * h / 14);
+            const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789';
+            const iv = setInterval(() => {
+                ctx.fillStyle = 'rgba(0,0,0,0.1)';
+                ctx.fillRect(0, 0, w, h);
+                ctx.font = '12px Share Tech Mono';
+                for (let i = 0; i < drops.length; i++) {
+                    ctx.fillStyle = Math.random() > 0.97 ? '#fff' : '#39ff14';
+                    ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 14, drops[i] * 14);
+                    if (drops[i] * 14 > h && Math.random() > 0.98) drops[i] = 0;
+                    drops[i]++;
+                }
+            }, 50);
+            return iv;
+        }
+
+        async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        async function startNeo() {
+            running = true;
+            overlay.classList.add('active');
+            const rainIv = startRain();
+
+            // Scene 1: bullets fly at Neo, he dodges
+            await sleep(600);
+            drawText('> ENTERING THE MATRIX...');
+            await sleep(1200);
+            clearStage();
+
+            let neo, txt;
+
+            // Neo stands
+            neo = drawAscii(NEO_STAND, 100, 120);
+            txt = drawText('NEO: "I know kung fu."');
+            await sleep(1400);
+
+            // Bullets come
+            clearStage();
+            neo = drawAscii(NEO_STAND, 100, 120);
+            for (let i = 0; i < 6; i++) {
+                const b = document.createElement('div');
+                b.className = 'neo-bullet';
+                b.textContent = '--->';
+                b.style.left = (350 + i * 40) + 'px';
+                b.style.top = (130 + (i % 3) * 15) + 'px';
+                stage.appendChild(b);
+            }
+            txt = drawText('*bullets incoming*');
+            await sleep(800);
+
+            // Dodge!
+            clearStage();
+            neo = drawAscii(NEO_DODGE, 100, 130);
+            for (let i = 0; i < 6; i++) {
+                const b = document.createElement('div');
+                b.className = 'neo-bullet';
+                b.textContent = '--->';
+                b.style.left = (200 + i * 40) + 'px';
+                b.style.top = (115 + (i % 3) * 12) + 'px';
+                stage.appendChild(b);
+            }
+            txt = drawText('*bullet time*');
+            await sleep(1000);
+
+            // Deep dodge
+            clearStage();
+            neo = drawAscii(NEO_DODGE_DEEP, 100, 140);
+            for (let i = 0; i < 6; i++) {
+                const b = document.createElement('div');
+                b.className = 'neo-bullet';
+                b.textContent = '--->';
+                b.style.left = (50 + i * 45) + 'px';
+                b.style.top = (110 + (i % 3) * 10) + 'px';
+                stage.appendChild(b);
+            }
+            txt = drawText('"DODGE THIS." — Neo dodges anyway.');
+            await sleep(1400);
+
+            // Scene 2: Neo spots the claw
+            clearStage();
+            neo = drawAscii(NEO_STAND, 100, 120);
+            drawAscii(MONKEY_STAND, 500, 120, 'magenta');
+            txt = drawText('MONKEYWORK appears. Neo needs a weapon...');
+            await sleep(1600);
+
+            // Neo grabs the claw
+            clearStage();
+            neo = drawAscii(NEO_GRAB, 100, 120);
+            drawAscii(NEO_CLAW, 220, 110, 'cyan');
+            drawAscii(MONKEY_STAND, 500, 120, 'magenta');
+            txt = drawText('Neo grabs the OpenClaw!');
+            await sleep(1400);
+
+            // Scene 3: FIGHT
+            clearStage();
+            drawAscii(NEO_FIGHT1, 200, 120, 'cyan');
+            drawAscii(MONKEY_STAND, 420, 120, 'magenta');
+            txt = drawText('>>> FIGHT <<<');
+            await sleep(900);
+
+            clearStage();
+            drawAscii(NEO_SWING, 260, 120, 'cyan');
+            drawAscii(MONKEY_HIT, 430, 120, 'magenta');
+            txt = drawText('*SLASH*');
+            await sleep(700);
+
+            clearStage();
+            drawAscii(NEO_FIGHT2, 300, 120, 'cyan');
+            drawAscii(MONKEY_HIT, 450, 120, 'magenta');
+            txt = drawText('*CRITICAL HIT*');
+            await sleep(800);
+
+            clearStage();
+            drawAscii(NEO_SWING, 340, 120, 'cyan');
+            drawAscii(MONKEY_DOWN, 470, 130, 'magenta');
+            txt = drawText('MONKEYWORK is down!');
+            await sleep(1200);
+
+            clearStage();
+            drawAscii(NEO_STAND, 300, 120, 'cyan');
+            drawAscii(MONKEY_DEAD, 470, 140, 'magenta');
+            txt = drawText('OPENCLAW WINS. AUTOMATION > MONKEYWORK.');
+            await sleep(3000);
+
+            clearStage();
+            txt = drawText('[ there is no spoon. only claw. ]');
+            await sleep(2500);
+
+            clearInterval(rainIv);
+            stopNeo();
+        }
+
+        function stopNeo() {
+            running = false;
+            overlay.classList.remove('active');
+            clearStage();
+            const ctx = rainCanvas.getContext('2d');
+            ctx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+        }
+    })();
 
     // Status bar click cycle
     const statusMsgs = [
