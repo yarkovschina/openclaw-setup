@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Настройка OpenClaw — AI-автоматизация под ключ</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', -apple-system, sans-serif; color: #1a1a1a; line-height: 1.6; background: #fff; }
+
+/* === NAV === */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  padding: 0 40px; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: box-shadow 0.3s;
+}
+.nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; color: #e84593; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { text-decoration: none; color: #555; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: #e84593; }
+.nav-cta {
+  background: #e84593; color: #fff; padding: 10px 24px; border-radius: 50px;
+  text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.2s;
+}
+.nav-cta:hover { background: #d63384; transform: translateY(-1px); }
+
+/* === HAMBURGER === */
+.nav-burger {
+  display: none; width: 44px; height: 44px; background: none; border: none;
+  cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  padding: 0; z-index: 201;
+}
+.nav-burger span {
+  display: block; width: 22px; height: 2px; background: #1a1a1a;
+  border-radius: 2px; transition: all 0.3s;
+}
+.nav-burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.nav-burger.open span:nth-child(2) { opacity: 0; }
+.nav-burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.mobile-menu {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.98); backdrop-filter: blur(20px);
+  z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-size: 20px; font-weight: 600; color: #1a1a1a; text-decoration: none;
+  padding: 12px 0; transition: color 0.2s;
+}
+.mobile-menu a:hover { color: #e84593; }
+.mobile-menu .nav-cta {
+  margin-top: 16px; padding: 16px 40px; font-size: 16px; border-radius: 16px;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.accent { color: #e84593; }
+
+/* === HERO === */
+.hero {
+  padding: 120px 0 80px;
+  display: flex; align-items: center; gap: 60px;
+  min-height: 90vh;
+}
+.hero-text { flex: 1; }
+.hero-badge {
+  display: inline-block; background: #fdf0f6; color: #e84593;
+  padding: 6px 16px; border-radius: 50px; font-size: 14px; font-weight: 600;
+  margin-bottom: 24px;
+}
+.hero h1 { font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+.hero-sub { font-size: 18px; color: #555; line-height: 1.6; margin-bottom: 12px; max-width: 520px; }
+.hero-price-hint { font-size: 16px; color: #888; margin-bottom: 32px; }
+.hero-price-hint strong { color: #e84593; font-weight: 700; }
+.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #e84593; color: #fff; padding: 18px 36px; border-radius: 16px;
+  text-decoration: none; font-weight: 700; font-size: 18px;
+  transition: all 0.3s; border: none; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(232,69,147,0.35);
+}
+.btn-primary:hover { background: #d63384; transform: translateY(-2px); box-shadow: 0 6px 28px rgba(232,69,147,0.45); }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: #e84593; padding: 18px 36px; border-radius: 16px;
+  text-decoration: none; font-weight: 700; font-size: 18px;
+  border: 2px solid #e84593; transition: all 0.2s; cursor: pointer;
+}
+.btn-outline:hover { background: #fdf0f6; }
+.hero-visual { flex: 1; position: relative; }
+.hero-terminal {
+  background: #1a1a2e; border-radius: 20px; padding: 0; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.hero-terminal-bar {
+  display: flex; align-items: center; gap: 8px; padding: 14px 20px;
+  background: rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.hero-terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+.hero-terminal-dot:nth-child(1) { background: #ff5f57; }
+.hero-terminal-dot:nth-child(2) { background: #febc2e; }
+.hero-terminal-dot:nth-child(3) { background: #28c840; }
+.hero-terminal-title { color: rgba(255,255,255,0.4); font-size: 12px; margin-left: 8px; }
+.hero-terminal-body {
+  padding: 24px; font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.7);
+}
+.hero-terminal-body .prompt { color: #e84593; }
+.hero-terminal-body .cmd { color: #fff; }
+.hero-terminal-body .ok { color: #28c840; }
+.hero-terminal-body .dim { color: rgba(255,255,255,0.35); }
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 40px; padding-top: 32px; border-top: 1px solid #eee;
+}
+.hero-stat-num { font-size: 28px; font-weight: 800; color: #e84593; }
+.hero-stat-label { font-size: 13px; color: #888; margin-top: 2px; }
+
+/* === SECTIONS === */
+section { padding: 80px 0; }
+.section-label {
+  text-transform: uppercase; font-size: 13px; font-weight: 700; letter-spacing: 2px;
+  color: #e84593; margin-bottom: 12px;
+}
+.section-title { font-size: 40px; font-weight: 900; line-height: 1.15; margin-bottom: 16px; }
+.section-desc { font-size: 18px; color: #666; max-width: 600px; margin-bottom: 48px; }
+
+/* === PROBLEMS === */
+.problems { background: #fff; }
+.problems-top { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 48px; }
+.pain-card {
+  background: #fafafa; border-radius: 20px; padding: 32px 24px;
+  border: 1px solid #f0f0f0; transition: all 0.3s; text-align: center;
+}
+.pain-card:hover { border-color: #e84593; transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.06); }
+.pain-icon { font-size: 48px; margin-bottom: 16px; }
+.pain-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.pain-desc { font-size: 14px; color: #888; line-height: 1.5; }
+
+/* === HOW === */
+.how { background: #fafafa; }
+.how-value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
+.value-card {
+  background: #fdf0f6; border-radius: 20px; padding: 36px 28px; position: relative;
+}
+.value-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%; background: #e84593;
+  color: #fff; font-weight: 800; font-size: 18px; margin-bottom: 16px;
+}
+.value-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.value-card p { font-size: 15px; color: #666; line-height: 1.6; }
+.process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.step-card {
+  background: #e84593; color: #fff; border-radius: 20px; padding: 32px 24px;
+  position: relative; overflow: hidden;
+}
+.step-card::after {
+  content: ''; position: absolute; top: -20px; right: -20px;
+  width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.1);
+}
+.step-num { font-size: 48px; font-weight: 900; opacity: 0.3; line-height: 1; margin-bottom: 12px; }
+.step-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.step-card p { font-size: 14px; opacity: 0.85; line-height: 1.6; }
+
+/* === WHAT YOU GET === */
+.includes { background: #fff; }
+.includes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.include-card {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 24px; background: #fafafa; border-radius: 16px; border: 1px solid #f0f0f0;
+  transition: all 0.2s;
+}
+.include-card:hover { background: #fdf0f6; border-color: #f5c6df; }
+.include-check {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+  background: #e84593; display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 16px; font-weight: 700; margin-top: 2px;
+}
+.include-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.include-text p { font-size: 14px; color: #888; line-height: 1.5; }
+
+/* === PRICING === */
+.pricing { background: #fafafa; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; }
+.price-card {
+  background: #fff; border-radius: 24px; padding: 36px 28px;
+  border: 2px solid #f0f0f0; position: relative; transition: all 0.3s;
+}
+.price-card:hover { border-color: #ddd; }
+.price-card.featured {
+  border-color: #e84593; transform: scale(1.04);
+  box-shadow: 0 20px 60px rgba(232,69,147,0.15);
+}
+.price-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: #e84593; color: #fff; padding: 6px 20px; border-radius: 50px;
+  font-size: 13px; font-weight: 700; white-space: nowrap;
+}
+.price-name { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+.price-amount { font-size: 42px; font-weight: 900; color: #1a1a1a; line-height: 1.1; margin-bottom: 4px; }
+.price-amount .currency { font-size: 24px; }
+.price-note { font-size: 14px; color: #888; margin-bottom: 24px; }
+.price-features { list-style: none; margin-bottom: 28px; }
+.price-features li {
+  padding: 10px 0; border-bottom: 1px solid #f5f5f5;
+  font-size: 14px; color: #555; display: flex; align-items: flex-start; gap: 10px;
+}
+.price-features li:last-child { border-bottom: none; }
+.price-features .check { color: #e84593; font-weight: 700; flex-shrink: 0; }
+.price-btn {
+  display: block; width: 100%; padding: 16px; border-radius: 14px;
+  text-align: center; font-weight: 700; font-size: 16px;
+  text-decoration: none; transition: all 0.2s; border: none; cursor: pointer;
+}
+.price-btn-primary { background: #e84593; color: #fff; box-shadow: 0 4px 16px rgba(232,69,147,0.3); }
+.price-btn-primary:hover { background: #d63384; }
+.price-btn-outline { background: transparent; color: #e84593; border: 2px solid #e84593; }
+.price-btn-outline:hover { background: #fdf0f6; }
+
+/* === FAQ === */
+.faq { background: #fff; }
+.faq-list { max-width: 720px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid #eee; overflow: hidden; }
+.faq-question {
+  width: 100%; padding: 24px 0; background: none; border: none;
+  font-size: 17px; font-weight: 600; text-align: left;
+  cursor: pointer; display: flex; justify-content: space-between;
+  align-items: center; font-family: inherit; color: #1a1a1a; transition: color 0.2s;
+}
+.faq-question:hover { color: #e84593; }
+.faq-icon {
+  width: 32px; height: 32px; border-radius: 50%; background: #fdf0f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #e84593; flex-shrink: 0; transition: transform 0.3s;
+}
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.faq-answer-inner { padding: 0 0 24px; font-size: 15px; color: #666; line-height: 1.7; }
+
+/* === CTA FINAL === */
+.cta-final {
+  background: linear-gradient(135deg, #e84593, #f06eaa);
+  color: #fff; padding: 80px 0; text-align: center;
+}
+.cta-final .section-label { color: rgba(255,255,255,0.7); }
+.cta-final .section-title { color: #fff; margin-bottom: 16px; }
+.cta-final .section-desc { color: rgba(255,255,255,0.85); margin: 0 auto 40px; }
+.btn-white {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; color: #e84593; padding: 18px 40px; border-radius: 16px;
+  text-decoration: none; font-weight: 700; font-size: 18px; border: none; cursor: pointer;
+  transition: all 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+
+/* === FOOTER === */
+.footer { background: #1a1a1a; color: #fff; padding: 48px 0 24px; }
+.footer-top { display: flex; justify-content: space-between; align-items: start; margin-bottom: 40px; }
+.footer-logo { font-size: 24px; font-weight: 800; color: #e84593; }
+.footer-logo-desc { font-size: 13px; color: #888; margin-top: 4px; max-width: 300px; }
+.footer-links a { color: #aaa; text-decoration: none; font-size: 14px; display: block; margin-bottom: 8px; }
+.footer-links a:hover { color: #e84593; }
+.footer-email { color: #e84593; text-decoration: none; font-weight: 600; }
+.footer-bottom {
+  border-top: 1px solid #333; padding-top: 20px;
+  display: flex; justify-content: space-between; font-size: 12px; color: #666;
+}
+
+/* === CHAT WIDGET === */
+.chat-widget {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: #e84593; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; cursor: pointer; text-decoration: none;
+  box-shadow: 0 4px 20px rgba(232,69,147,0.4); transition: all 0.3s;
+}
+.chat-widget:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(232,69,147,0.5); }
+.chat-pulse {
+  position: absolute; width: 100%; height: 100%; border-radius: 50%;
+  background: #e84593; animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .hero { flex-direction: column; padding-top: 100px; gap: 40px; }
+  .hero h1 { font-size: 38px; }
+  .pricing-grid, .problems-top, .process-steps { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-burger { display: flex; }
+  .nav { padding: 0 16px; height: 56px; }
+  .container { padding: 0 16px; }
+  section { padding: 60px 0; }
+  .section-title { font-size: 28px; }
+  .section-desc { font-size: 16px; margin-bottom: 32px; }
+  .hero {
+    flex-direction: column; padding-top: 80px; min-height: auto;
+    gap: 32px; text-align: center;
+  }
+  .hero h1 { font-size: 28px; }
+  .hero-sub { max-width: none; font-size: 15px; }
+  .hero-price-hint { display: none; }
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+    margin-top: 20px; padding-top: 20px;
+  }
+  .hero-stat-num { font-size: 22px; }
+  .hero-stat-label { font-size: 11px; }
+  .hero-actions { justify-content: center; }
+  .hero-actions .btn-primary { font-size: 16px; padding: 16px 28px; width: 100%; justify-content: center; }
+  .hero-actions .btn-outline { display: none; }
+  .pricing-grid, .problems-top, .how-value-grid, .process-steps,
+  .includes-grid { grid-template-columns: 1fr; }
+  .price-card.featured { transform: none; }
+  .faq-question { padding: 18px 0; font-size: 15px; }
+  .faq-answer-inner { padding: 0 0 16px; font-size: 14px; }
+  .footer-top { flex-direction: column; gap: 24px; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-logo">OpenClaw</div>
+  <div class="nav-links">
+    <a href="#problems">Зачем</a>
+    <a href="#how">Как работаем</a>
+    <a href="#includes">Что входит</a>
+    <a href="#pricing">Тарифы</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://t.me/iaroslav" class="nav-cta">Написать в Telegram</a>
+  </div>
+  <button class="nav-burger" onclick="toggleMenu()" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#problems" onclick="toggleMenu()">Зачем</a>
+  <a href="#how" onclick="toggleMenu()">Как работаем</a>
+  <a href="#includes" onclick="toggleMenu()">Что входит</a>
+  <a href="#pricing" onclick="toggleMenu()">Тарифы</a>
+  <a href="#faq" onclick="toggleMenu()">FAQ</a>
+  <a href="https://t.me/iaroslav" class="nav-cta" onclick="toggleMenu()">Написать в Telegram</a>
+</div>
+
+<!-- HERO -->
+<section class="hero container">
+  <div class="hero-text">
+    <div class="hero-badge">AI-автоматизация для бизнеса</div>
+    <h1>Настрою <span class="accent">OpenClaw</span> под ваш бизнес за&nbsp;неделю</h1>
+    <p class="hero-sub">AI-агенты, которые отвечают клиентам, обрабатывают заявки и автоматизируют рутину — без кода, с вашей стороны только контент</p>
+    <p class="hero-price-hint">от <strong>30 000 ₽</strong> за настройку · поддержка включена</p>
+    <div class="hero-actions">
+      <a href="https://t.me/iaroslav" class="btn-primary">Обсудить задачу</a>
+      <a href="#how" class="btn-outline">Как это работает ↓</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">50+</div>
+        <div class="hero-stat-label">настроенных<br>проектов</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">3-7</div>
+        <div class="hero-stat-label">дней на<br>запуск</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">24/7</div>
+        <div class="hero-stat-label">бот работает<br>без перерывов</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-terminal">
+      <div class="hero-terminal-bar">
+        <div class="hero-terminal-dot"></div>
+        <div class="hero-terminal-dot"></div>
+        <div class="hero-terminal-dot"></div>
+        <div class="hero-terminal-title">openclaw &mdash; your-business</div>
+      </div>
+      <div class="hero-terminal-body">
+        <div><span class="prompt">$</span> <span class="cmd">openclaw deploy --agent support</span></div>
+        <div class="ok">&#10003; Agent "support" deployed</div>
+        <div class="dim">  listening on: t.me/your_bot</div>
+        <div style="height: 12px;"></div>
+        <div><span class="prompt">$</span> <span class="cmd">openclaw status</span></div>
+        <div class="ok">&#10003; 3 agents running</div>
+        <div class="dim">  support    — 847 messages today</div>
+        <div class="dim">  sales      — 12 leads captured</div>
+        <div class="dim">  secretary  — 6 tasks completed</div>
+        <div style="height: 12px;"></div>
+        <div><span class="prompt">$</span> <span class="cmd" style="animation: blink 1s infinite;">_</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMS -->
+<section class="problems" id="problems">
+  <div class="container">
+    <div class="section-label">Знакомо?</div>
+    <div class="section-title">Проблемы, которые <span class="accent">решает OpenClaw</span></div>
+    <div class="section-desc">Если хотя бы один пункт про вас — автоматизация окупится в первый же месяц</div>
+
+    <div class="problems-top">
+      <div class="pain-card">
+        <div class="pain-icon">&#128172;</div>
+        <div class="pain-title">Менеджеры не успевают</div>
+        <div class="pain-desc">Клиенты пишут в чат, ждут ответа часами. Часть уходит к конкурентам, не дождавшись</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">&#128337;</div>
+        <div class="pain-title">Рутина съедает время</div>
+        <div class="pain-desc">Одни и те же вопросы, одни и те же ответы. Команда тонет в повторяющихся задачах</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">&#128176;</div>
+        <div class="pain-title">Лиды теряются</div>
+        <div class="pain-desc">Заявки приходят в разные каналы, никто не собирает их в одном месте и не обрабатывает вовремя</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">&#129302;</div>
+        <div class="pain-title">AI — непонятно как</div>
+        <div class="pain-desc">Все говорят про ChatGPT и ботов, но как внедрить это в свой бизнес — непонятно с чего начать</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="section-label">Как мы работаем</div>
+    <div class="section-title">Настройка <span class="accent">под ключ</span></div>
+    <div class="section-desc">Вы рассказываете о бизнесе — я делаю всё остальное</div>
+
+    <div class="how-value-grid">
+      <div class="value-card">
+        <div class="value-num">1</div>
+        <h3>Под ваш бизнес</h3>
+        <p>Не шаблон, а агент, обученный на ваших данных: товары, услуги, FAQ, tone of voice. Отвечает как ваш лучший менеджер</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">2</div>
+        <h3>Без кода</h3>
+        <p>Вам не нужно быть разработчиком. Я настраиваю платформу, вы только предоставляете контент и проверяете результат</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">3</div>
+        <h3>Работает 24/7</h3>
+        <p>Бот отвечает мгновенно в любое время. Ночью, в выходные, в праздники — клиенты получают ответ за секунды</p>
+      </div>
+    </div>
+
+    <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 24px;">Процесс от заявки до запуска</h3>
+    <div class="process-steps">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <h3>Брифинг</h3>
+        <p>Созваниваемся на 30 минут, разбираем ваш бизнес, каналы, боли клиентов</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <h3>Настройка</h3>
+        <p>Создаю агентов, загружаю базу знаний, настраиваю сценарии и интеграции</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <h3>Тестирование</h3>
+        <p>Вместе прогоняем реальные диалоги, дорабатываем ответы до идеала</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <h3>Запуск</h3>
+        <p>Подключаем к вашему Telegram / сайту. Бот работает, я на связи для поддержки</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="includes" id="includes">
+  <div class="container">
+    <div class="section-label">Что входит</div>
+    <div class="section-title">Полная настройка <span class="accent">OpenClaw</span></div>
+    <div class="section-desc">Всё, что нужно для запуска AI-агента в вашем бизнесе</div>
+
+    <div class="includes-grid">
+      <div class="include-card">
+        <div class="include-check">&#10003;</div>
+        <div class="include-text">
+          <h4>AI-агент поддержки</h4>
+          <p>Отвечает на вопросы клиентов по вашей базе знаний, 24/7, мгновенно</p>
+        </div>
+      </div>
+      <div class="include-card">
+        <div class="include-check">&#10003;</div>
+        <div class="include-text">
+          <h4>База знаний</h4>
+          <p>Загружу ваши документы, FAQ, описания товаров — агент будет знать всё о бизнесе</p>
+        </div>
+      </div>
+      <div class="include-card">
+        <div class="include-check">&#10003;</div>
+        <div class="include-text">
+          <h4>Сценарии диалогов</h4>
+          <p>Продающие скрипты, обработка возражений, квалификация лидов — всё в автомате</p>
+        </div>
+      </div>
+      <div class="include-card">
+        <div class="include-check">&#10003;</div>
+        <div class="include-text">
+          <h4>Интеграция с Telegram</h4>
+          <p>Подключение к вашему боту или создание нового. Работает в личке и в группах</p>
+        </div>
+      </div>
+      <div class="include-card">
+        <div class="include-check">&#10003;</div>
+        <div class="include-text">
+          <h4>Передача на человека</h4>
+          <p>Если вопрос сложный — бот плавно передаёт диалог живому оператору</p>
+        </div>
+      </div>
+      <div class="include-card">
+        <div class="include-check">&#10003;</div>
+        <div class="include-text">
+          <h4>Аналитика и логи</h4>
+          <p>Видите все диалоги, метрики, популярные вопросы. Знаете, что волнует клиентов</p>
+        </div>
+      </div>
+      <div class="include-card">
+        <div class="include-check">&#10003;</div>
+        <div class="include-text">
+          <h4>Обучение команды</h4>
+          <p>Покажу, как управлять ботом, обновлять базу знаний и читать аналитику</p>
+        </div>
+      </div>
+      <div class="include-card">
+        <div class="include-check">&#10003;</div>
+        <div class="include-text">
+          <h4>Поддержка после запуска</h4>
+          <p>2 недели бесплатной поддержки: доработки, исправления, консультации в чате</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div style="text-align: center;">
+      <div class="section-label">Тарифы</div>
+      <div class="section-title">Выберите свой <span class="accent">формат</span></div>
+      <div class="section-desc" style="margin: 0 auto 48px;">Все тарифы включают настройку, тестирование и поддержку</div>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Старт</div>
+        <div class="price-amount"><span class="currency">&#8381;</span>30 000</div>
+        <div class="price-note">разовая настройка</div>
+        <ul class="price-features">
+          <li><span class="check">&#10003;</span> 1 AI-агент (поддержка или продажи)</li>
+          <li><span class="check">&#10003;</span> База знаний до 50 документов</li>
+          <li><span class="check">&#10003;</span> Подключение к Telegram</li>
+          <li><span class="check">&#10003;</span> 2 недели поддержки</li>
+        </ul>
+        <a href="https://t.me/iaroslav" class="price-btn price-btn-outline">Выбрать</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Популярный выбор</div>
+        <div class="price-name">Бизнес</div>
+        <div class="price-amount"><span class="currency">&#8381;</span>60 000</div>
+        <div class="price-note">разовая настройка</div>
+        <ul class="price-features">
+          <li><span class="check">&#10003;</span> До 3 AI-агентов</li>
+          <li><span class="check">&#10003;</span> Неограниченная база знаний</li>
+          <li><span class="check">&#10003;</span> Telegram + виджет на сайт</li>
+          <li><span class="check">&#10003;</span> Сценарии продаж и квалификации</li>
+          <li><span class="check">&#10003;</span> 1 месяц поддержки</li>
+        </ul>
+        <a href="https://t.me/iaroslav" class="price-btn price-btn-primary">Выбрать</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Премиум</div>
+        <div class="price-amount"><span class="currency">&#8381;</span>120 000</div>
+        <div class="price-note">разовая настройка + ежемесячная поддержка</div>
+        <ul class="price-features">
+          <li><span class="check">&#10003;</span> Неограниченные агенты</li>
+          <li><span class="check">&#10003;</span> Кастомные интеграции (CRM, sheets)</li>
+          <li><span class="check">&#10003;</span> Все каналы</li>
+          <li><span class="check">&#10003;</span> Приоритетная поддержка 3 мес</li>
+          <li><span class="check">&#10003;</span> Ежемесячная оптимизация</li>
+        </ul>
+        <a href="https://t.me/iaroslav" class="price-btn price-btn-outline">Выбрать</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div style="text-align: center;">
+      <div class="section-label">Вопросы</div>
+      <div class="section-title">Частые <span class="accent">вопросы</span></div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Что такое OpenClaw?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">OpenClaw — это платформа для создания AI-агентов, которые работают в Telegram, на сайте и в других каналах. Агент знает всё о вашем бизнесе и общается с клиентами как живой менеджер — только быстрее и без выходных.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Нужно ли мне разбираться в AI или программировании?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">Нет. Я настраиваю всё сам. Вам нужно только предоставить информацию о бизнесе (FAQ, описания товаров, скрипты) и протестировать результат. После запуска управление ботом интуитивно понятное.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Как быстро будет готово?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">Тариф «Старт» — 3-5 рабочих дней. «Бизнес» — 5-7 дней. «Премиум» — от 7 дней, зависит от сложности интеграций. Сроки считаются с момента получения всех материалов.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          А если бот ответит неправильно?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">Агент обучен строго на ваших данных и не выдумывает. Если вопрос выходит за рамки базы знаний — бот честно говорит, что не знает, и передаёт диалог живому оператору. Плюс на этапе тестирования мы прогоняем все реальные сценарии.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Какие каналы поддерживаются?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">Telegram (боты и группы), виджет на сайт, WhatsApp, Instagram Direct. Можно подключить несколько каналов к одному агенту — он будет вести диалоги везде одновременно.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Сколько стоит после настройки?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">Сама платформа OpenClaw тарифицируется отдельно по количеству сообщений. Для большинства бизнесов это 3 000-10 000 ₽/мес. Точную стоимость рассчитаем на брифинге, исходя из вашего объёма.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-final">
+  <div class="container">
+    <div class="section-label">Готовы начать?</div>
+    <div class="section-title">Запустите AI-агента<br>для вашего бизнеса</div>
+    <div class="section-desc">Напишите мне — обсудим задачу, покажу демо и рассчитаю стоимость. Бесплатно и без обязательств</div>
+    <a href="https://t.me/iaroslav" class="btn-white">Написать в Telegram</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">OpenClaw</div>
+        <div class="footer-logo-desc">AI-автоматизация для бизнеса. Настройка интеллектуальных агентов под ключ</div>
+      </div>
+      <div class="footer-links">
+        <a href="#problems">Зачем</a>
+        <a href="#how">Как работаем</a>
+        <a href="#pricing">Тарифы</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div>
+        <a href="https://t.me/iaroslav" class="footer-email">@iaroslav</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 OpenClaw Setup</span>
+      <span>ИП Шолудченко Я. А.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- CHAT WIDGET -->
+<a href="https://t.me/iaroslav" class="chat-widget" target="_blank">
+  <div class="chat-pulse"></div>
+  &#128172;
+</a>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// Mobile menu
+function toggleMenu() {
+  const burger = document.querySelector('.nav-burger');
+  const menu = document.getElementById('mobileMenu');
+  burger.classList.toggle('open');
+  menu.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+
+// FAQ
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-answer').style.maxHeight = null;
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    const answer = item.querySelector('.faq-answer');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+
+// Terminal typing animation
+@keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+</script>
+<style>
+@keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+.hero-terminal-body .cmd[style*="blink"] { animation: blink 1s infinite; }
+</style>
+</body>
+</html>
