@@ -485,6 +485,58 @@
         .price-features li:last-child { border-bottom: none; }
         .price-features .check { color: #39ff14; font-weight: 700; flex-shrink: 0; text-shadow: 0 0 6px rgba(57,255,20,0.3); }
 
+        /* === SLOTS === */
+        .slots-section { text-align: center; }
+        .slots-grid {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
+            max-width: 560px; margin: 0 auto 24px;
+        }
+        .slot {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 16px 10px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+            transition: all 0.25s;
+            position: relative;
+        }
+        .slot-day {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem; font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .slot-status { font-size: 0.65rem; }
+        .slot.available {
+            border-color: rgba(0, 200, 212, 0.25);
+            cursor: pointer;
+        }
+        .slot.available .slot-day { color: var(--cyan); text-shadow: 0 0 8px rgba(0, 200, 212, 0.3); }
+        .slot.available .slot-status { color: var(--cyan); }
+        .slot.available:hover {
+            background: var(--cyan-glow);
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 200, 212, 0.1);
+        }
+        .slot.taken {
+            opacity: 0.4;
+        }
+        .slot.taken .slot-status { color: var(--magenta); }
+        .slots-note {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+        .slots-note strong {
+            color: var(--magenta);
+            text-shadow: 0 0 6px rgba(255, 45, 123, 0.3);
+        }
+        @media (max-width: 768px) {
+            .slots-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
         /* === FAQ === */
         .faq-list { max-width: 100%; }
         .faq-item { border-bottom: 1px solid var(--border); overflow: hidden; }
@@ -854,6 +906,40 @@
                     <a href="https://t.me/iaroslav" class="btn-outline" style="display:block;text-align:center;">Let's discuss</a>
                 </div>
             </div>
+        </section>
+
+        <!-- SLOTS -->
+        <section id="slots" class="slots-section">
+            <h2>Availability</h2>
+            <div class="section-title" style="text-align:center;">Book your <span class="accent">install slot</span></div>
+            <div class="section-desc" style="text-align:center; margin: 0 auto 32px;">This week's schedule. I take max 5 installs per week</div>
+            <div class="slots-grid">
+                <div class="slot taken">
+                    <div class="slot-day">Mon</div>
+                    <div class="slot-status">booked</div>
+                </div>
+                <div class="slot taken">
+                    <div class="slot-day">Tue</div>
+                    <div class="slot-status">booked</div>
+                </div>
+                <div class="slot taken">
+                    <div class="slot-day">Wed</div>
+                    <div class="slot-status">booked</div>
+                </div>
+                <a href="https://t.me/iaroslav" style="text-decoration:none;">
+                    <div class="slot available">
+                        <div class="slot-day">Thu</div>
+                        <div class="slot-status">open</div>
+                    </div>
+                </a>
+                <a href="https://t.me/iaroslav" style="text-decoration:none;">
+                    <div class="slot available">
+                        <div class="slot-day">Fri</div>
+                        <div class="slot-status">open</div>
+                    </div>
+                </a>
+            </div>
+            <div class="slots-note">Only <strong>2 slots</strong> left this week &mdash; <a href="https://t.me/iaroslav" style="color: var(--cyan); text-decoration: none;">grab yours</a></div>
         </section>
 
         <!-- FAQ -->
