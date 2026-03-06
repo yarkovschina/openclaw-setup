@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Настройка OpenClaw — AI-автоматизация под ключ</title>
+    <title>OpenClaw Setup — AI Automation, Done For You</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #f0f0f0;
-            --surface: rgba(0, 0, 0, 0.03);
-            --border: rgba(0, 0, 0, 0.1);
-            --text: #2a2a30;
+            --bg: #0a0a0f;
+            --surface: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #d0d0d8;
             --muted: #6a6a78;
-            --cyan: #0088a0;
-            --magenta: #c01850;
-            --cyan-glow: rgba(0, 136, 160, 0.08);
-            --magenta-glow: rgba(192, 24, 80, 0.06);
+            --cyan: #00c8d4;
+            --magenta: #e0306e;
+            --cyan-glow: rgba(0, 200, 212, 0.08);
+            --magenta-glow: rgba(224, 48, 110, 0.06);
         }
 
         body {
@@ -37,8 +37,8 @@
                 0deg,
                 transparent,
                 transparent 2px,
-                rgba(0, 0, 0, 0.02) 2px,
-                rgba(0, 0, 0, 0.02) 4px
+                rgba(255, 255, 255, 0.015) 2px,
+                rgba(255, 255, 255, 0.015) 4px
             );
             pointer-events: none;
             z-index: 100;
@@ -48,8 +48,8 @@
             position: fixed;
             inset: 0;
             background-image:
-                linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
             pointer-events: none;
             z-index: 0;
@@ -85,7 +85,7 @@
         /* === NAV === */
         .nav {
             position: fixed; top: 0; left: 0; right: 0; z-index: 90;
-            background: rgba(240, 240, 240, 0.92);
+            background: rgba(10, 10, 15, 0.92);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             padding: 0 24px; height: 56px;
@@ -111,6 +111,7 @@
         .nav a.nav-cta:hover {
             background: var(--cyan-glow);
             border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 200, 212, 0.15);
         }
         .nav-logo {
             font-family: 'Orbitron', sans-serif;
@@ -118,6 +119,7 @@
             color: var(--cyan);
             letter-spacing: 0.08em;
             margin-right: auto;
+            text-shadow: 0 0 20px rgba(0, 200, 212, 0.3);
         }
 
         /* === HAMBURGER === */
@@ -135,7 +137,7 @@
         .nav-burger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
         .mobile-menu {
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(240, 240, 240, 0.98); backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.98); backdrop-filter: blur(20px);
             z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
         }
         .mobile-menu.open { display: flex; }
@@ -173,11 +175,11 @@
             font-weight: 900;
             letter-spacing: 0.04em;
             color: var(--cyan);
-            text-shadow: 0 0 40px rgba(0, 136, 160, 0.15);
+            text-shadow: 0 0 40px rgba(0, 200, 212, 0.2);
             margin-bottom: 4px;
             line-height: 1.2;
         }
-        .hero h1 .accent { color: var(--magenta); }
+        .hero h1 .accent { color: var(--magenta); text-shadow: 0 0 30px rgba(224, 48, 110, 0.2); }
 
         .hero .sub {
             font-family: 'Orbitron', sans-serif;
@@ -222,8 +224,8 @@
             clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
         }
         .btn-primary:hover {
-            background: #006a80;
-            box-shadow: 0 0 25px rgba(0, 136, 160, 0.2);
+            background: #00a8b4;
+            box-shadow: 0 0 30px rgba(0, 200, 212, 0.3);
         }
 
         .btn-outline {
@@ -243,6 +245,7 @@
         .btn-outline:hover {
             background: var(--cyan-glow);
             border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 200, 212, 0.1);
         }
 
         .hero-stats {
@@ -253,14 +256,14 @@
         .hero-stat-num {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.6rem; font-weight: 900; color: var(--cyan);
-            text-shadow: 0 0 20px rgba(0, 136, 160, 0.15);
+            text-shadow: 0 0 20px rgba(0, 200, 212, 0.2);
         }
         .hero-stat-label { font-size: 0.7rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.05em; }
 
-        /* Terminal in hero */
+        /* Terminal */
         .hero-terminal {
             margin-top: 36px;
-            background: var(--surface);
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border);
             overflow: hidden;
             clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
@@ -270,17 +273,17 @@
             border-bottom: 1px solid var(--border);
         }
         .hero-terminal-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .hero-terminal-dot:nth-child(1) { background: var(--magenta); }
-        .hero-terminal-dot:nth-child(2) { background: #d4a000; }
-        .hero-terminal-dot:nth-child(3) { background: var(--cyan); }
+        .hero-terminal-dot:nth-child(1) { background: var(--magenta); box-shadow: 0 0 6px rgba(224,48,110,0.4); }
+        .hero-terminal-dot:nth-child(2) { background: #d4a000; box-shadow: 0 0 6px rgba(212,160,0,0.4); }
+        .hero-terminal-dot:nth-child(3) { background: var(--cyan); box-shadow: 0 0 6px rgba(0,200,212,0.4); }
         .hero-terminal-title { color: var(--muted); font-size: 0.65rem; margin-left: 8px; letter-spacing: 0.1em; }
         .hero-terminal-body {
             padding: 20px; font-size: 0.8rem; line-height: 1.8; color: var(--muted);
         }
         .hero-terminal-body .prompt { color: var(--magenta); }
         .hero-terminal-body .cmd { color: var(--cyan); }
-        .hero-terminal-body .ok { color: #2a8a4a; }
-        .hero-terminal-body .dim { color: rgba(0,0,0,0.25); }
+        .hero-terminal-body .ok { color: #39ff14; text-shadow: 0 0 6px rgba(57,255,20,0.3); }
+        .hero-terminal-body .dim { color: rgba(255,255,255,0.2); }
 
         .cursor {
             display: inline-block;
@@ -289,6 +292,7 @@
             margin-left: 4px;
             vertical-align: text-bottom;
             animation: blink 1s step-end infinite;
+            box-shadow: 0 0 8px rgba(0, 200, 212, 0.4);
         }
         @keyframes blink {
             0%, 100% { opacity: 1; }
@@ -307,7 +311,7 @@
             color: var(--magenta);
             margin-bottom: 24px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(192, 24, 80, 0.15);
+            border-bottom: 1px solid rgba(224, 48, 110, 0.15);
         }
         section h2::before {
             content: '// ';
@@ -316,10 +320,10 @@
 
         section .section-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.4rem; font-weight: 900; color: var(--text);
+            font-size: 1.4rem; font-weight: 900; color: #fff;
             letter-spacing: 0.04em; margin-bottom: 8px;
         }
-        section .section-title .accent { color: var(--magenta); }
+        section .section-title .accent { color: var(--magenta); text-shadow: 0 0 20px rgba(224, 48, 110, 0.2); }
 
         section .section-desc {
             font-size: 0.85rem; color: var(--muted); margin-bottom: 32px; max-width: 560px;
@@ -346,8 +350,8 @@
         }
         .pain-card:hover {
             border-color: var(--cyan);
-            background: rgba(0, 136, 160, 0.04);
-            box-shadow: 0 0 30px rgba(0, 136, 160, 0.06);
+            background: var(--cyan-glow);
+            box-shadow: 0 0 30px rgba(0, 200, 212, 0.08);
         }
         .pain-card:hover::before { opacity: 1; }
         .pain-icon { font-size: 2rem; margin-bottom: 12px; }
@@ -359,22 +363,22 @@
         }
         .pain-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
 
-        /* === VALUE / PROCESS CARDS === */
+        /* === VALUE / PROCESS === */
         .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 36px; }
         .value-card {
             background: var(--magenta-glow);
-            border: 1px solid rgba(192, 24, 80, 0.15);
+            border: 1px solid rgba(224, 48, 110, 0.12);
             padding: 28px;
             clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
         }
         .value-num {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.2rem; font-weight: 900; color: var(--magenta);
-            margin-bottom: 12px;
+            margin-bottom: 12px; text-shadow: 0 0 15px rgba(224, 48, 110, 0.2);
         }
         .value-card h3 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem; font-weight: 700; color: var(--text);
+            font-size: 0.8rem; font-weight: 700; color: #fff;
             text-transform: uppercase; letter-spacing: 0.06em;
             margin-bottom: 8px;
         }
@@ -383,13 +387,13 @@
         .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .step-card {
             background: var(--cyan-glow);
-            border: 1px solid rgba(0, 136, 160, 0.15);
+            border: 1px solid rgba(0, 200, 212, 0.12);
             padding: 24px 20px;
             clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
         }
         .step-num {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem; font-weight: 900; color: var(--cyan); opacity: 0.3;
+            font-size: 1.8rem; font-weight: 900; color: var(--cyan); opacity: 0.25;
             line-height: 1; margin-bottom: 10px;
         }
         .step-card h3 {
@@ -410,14 +414,15 @@
         }
         .include-card:hover {
             border-color: var(--cyan);
-            background: rgba(0, 136, 160, 0.04);
+            background: var(--cyan-glow);
         }
         .include-check {
             flex-shrink: 0; font-size: 0.8rem;
-            color: var(--cyan); font-weight: 700; margin-top: 2px;
+            color: #39ff14; font-weight: 700; margin-top: 2px;
+            text-shadow: 0 0 6px rgba(57,255,20,0.3);
         }
         .include-text h4 {
-            font-size: 0.8rem; font-weight: 700; color: var(--text);
+            font-size: 0.8rem; font-weight: 700; color: #fff;
             margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em;
         }
         .include-text p { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
@@ -439,18 +444,19 @@
             background: var(--cyan); opacity: 0;
             transition: opacity 0.3s;
         }
-        .price-card:hover { border-color: var(--cyan); }
+        .price-card:hover { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0, 200, 212, 0.06); }
         .price-card:hover::before { opacity: 1; }
         .price-card.featured {
             border-color: var(--magenta);
             background: var(--magenta-glow);
+            box-shadow: 0 0 40px rgba(224, 48, 110, 0.08);
         }
         .price-card.featured::before { background: var(--magenta); opacity: 1; }
         .price-badge {
             position: absolute; top: 12px; right: 16px;
             font-size: 0.6rem; color: var(--magenta);
             letter-spacing: 0.1em; text-transform: uppercase;
-            border: 1px solid rgba(192, 24, 80, 0.2);
+            border: 1px solid rgba(224, 48, 110, 0.2);
             padding: 3px 10px;
         }
         .price-name {
@@ -458,10 +464,11 @@
             font-size: 0.85rem; font-weight: 700; color: var(--cyan);
             text-transform: uppercase; letter-spacing: 0.1em;
             margin-bottom: 12px;
+            text-shadow: 0 0 12px rgba(0, 200, 212, 0.2);
         }
         .price-amount {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2rem; font-weight: 900; color: var(--text);
+            font-size: 2rem; font-weight: 900; color: #fff;
             margin-bottom: 4px;
         }
         .price-amount .currency { font-size: 1.2rem; color: var(--magenta); }
@@ -473,7 +480,7 @@
             display: flex; align-items: flex-start; gap: 10px;
         }
         .price-features li:last-child { border-bottom: none; }
-        .price-features .check { color: var(--cyan); font-weight: 700; flex-shrink: 0; }
+        .price-features .check { color: #39ff14; font-weight: 700; flex-shrink: 0; text-shadow: 0 0 6px rgba(57,255,20,0.3); }
 
         /* === FAQ === */
         .faq-list { max-width: 100%; }
@@ -485,7 +492,7 @@
             cursor: pointer; display: flex; justify-content: space-between;
             align-items: center; color: var(--text); transition: color 0.2s;
         }
-        .faq-question:hover { color: var(--cyan); }
+        .faq-question:hover { color: var(--cyan); text-shadow: 0 0 10px rgba(0, 200, 212, 0.2); }
         .faq-icon {
             width: 28px; height: 28px;
             display: flex; align-items: center; justify-content: center;
@@ -500,7 +507,7 @@
         /* === CTA === */
         .cta-final {
             background: var(--cyan-glow);
-            border: 1px solid rgba(0, 136, 160, 0.15);
+            border: 1px solid rgba(0, 200, 212, 0.12);
             padding: 48px 36px;
             text-align: center;
             margin-bottom: 60px;
@@ -509,7 +516,7 @@
         .cta-final h3 {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.4rem; font-weight: 900; color: var(--cyan);
-            text-shadow: 0 0 30px rgba(0, 136, 160, 0.15);
+            text-shadow: 0 0 30px rgba(0, 200, 212, 0.2);
             margin-bottom: 12px;
         }
         .cta-final p {
@@ -517,7 +524,7 @@
             max-width: 500px; margin-left: auto; margin-right: auto;
         }
 
-        /* === STATUS BAR / FOOTER === */
+        /* === STATUS / FOOTER === */
         .status-bar {
             padding: 16px 20px;
             border: 1px solid var(--border);
@@ -538,7 +545,7 @@
             background: var(--cyan);
             border-radius: 50%;
             margin-right: 6px;
-            box-shadow: 0 0 6px var(--cyan);
+            box-shadow: 0 0 8px var(--cyan);
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
@@ -559,6 +566,7 @@
         footer a {
             color: var(--magenta);
             text-decoration: none;
+            text-shadow: 0 0 8px rgba(224, 48, 110, 0.2);
         }
         footer a:hover { text-decoration: underline; }
 
@@ -569,13 +577,13 @@
             background: var(--cyan); color: #fff;
             display: flex; align-items: center; justify-content: center;
             font-size: 24px; cursor: pointer; text-decoration: none;
-            box-shadow: 0 0 25px rgba(0, 136, 160, 0.3);
+            box-shadow: 0 0 30px rgba(0, 200, 212, 0.35);
             transition: all 0.3s;
             clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
         }
         .chat-widget:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 40px rgba(0, 136, 160, 0.4);
+            box-shadow: 0 0 50px rgba(0, 200, 212, 0.5);
         }
 
         /* === RESPONSIVE === */
@@ -596,7 +604,7 @@
             .includes-grid,
             .pricing-grid { grid-template-columns: 1fr; }
             .price-card.featured { transform: none; }
-            .footer { flex-direction: column; gap: 8px; }
+            footer { flex-direction: column; gap: 8px; }
         }
     </style>
 </head>
@@ -609,21 +617,21 @@
     <!-- NAV -->
     <nav class="nav" id="nav">
         <div class="nav-logo">OPENCLAW</div>
-        <a href="#problems" class="nav-link">Зачем</a>
-        <a href="#how" class="nav-link">Процесс</a>
-        <a href="#includes" class="nav-link">Что входит</a>
-        <a href="#pricing" class="nav-link">Тарифы</a>
+        <a href="#problems" class="nav-link">Why</a>
+        <a href="#how" class="nav-link">Process</a>
+        <a href="#includes" class="nav-link">Includes</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
         <a href="#faq" class="nav-link">FAQ</a>
         <a href="https://t.me/iaroslav" class="nav-cta">Telegram</a>
-        <button class="nav-burger" onclick="toggleMenu()" aria-label="Меню">
+        <button class="nav-burger" onclick="toggleMenu()" aria-label="Menu">
             <span></span><span></span><span></span>
         </button>
     </nav>
     <div class="mobile-menu" id="mobileMenu">
-        <a href="#problems" onclick="toggleMenu()">Зачем</a>
-        <a href="#how" onclick="toggleMenu()">Процесс</a>
-        <a href="#includes" onclick="toggleMenu()">Что входит</a>
-        <a href="#pricing" onclick="toggleMenu()">Тарифы</a>
+        <a href="#problems" onclick="toggleMenu()">Why</a>
+        <a href="#how" onclick="toggleMenu()">Process</a>
+        <a href="#includes" onclick="toggleMenu()">Includes</a>
+        <a href="#pricing" onclick="toggleMenu()">Pricing</a>
         <a href="#faq" onclick="toggleMenu()">FAQ</a>
         <a href="https://t.me/iaroslav" class="nav-cta" onclick="toggleMenu()">Telegram</a>
     </div>
@@ -632,29 +640,29 @@
 
         <!-- HERO -->
         <header class="hero">
-            <h1>Настрою <span class="accent">OpenClaw</span><br>под ваш бизнес</h1>
-            <div class="sub">AI-автоматизация // под ключ // за неделю</div>
+            <h1>I'll set up <span class="accent">OpenClaw</span><br>for your business</h1>
+            <div class="sub">AI Automation // Done for you // One week</div>
             <p class="bio">
-                AI-агенты, которые отвечают клиентам, обрабатывают заявки
-                и автоматизируют рутину — без кода, с вашей стороны только контент.
+                AI agents that respond to customers, process requests,
+                and automate routine tasks — no code needed, you just provide the content.
             </p>
-            <p class="price-hint">от <strong>30 000 &#8381;</strong> за настройку &middot; поддержка включена</p>
+            <p class="price-hint">from <strong>$350</strong> for setup &middot; support included</p>
             <div class="hero-actions">
-                <a href="https://t.me/iaroslav" class="btn-primary">Обсудить задачу</a>
-                <a href="#how" class="btn-outline">Как это работает</a>
+                <a href="https://t.me/iaroslav" class="btn-primary">Discuss your project</a>
+                <a href="#how" class="btn-outline">How it works</a>
             </div>
             <div class="hero-stats">
                 <div>
                     <div class="hero-stat-num">50+</div>
-                    <div class="hero-stat-label">проектов</div>
+                    <div class="hero-stat-label">projects</div>
                 </div>
                 <div>
                     <div class="hero-stat-num">3-7</div>
-                    <div class="hero-stat-label">дней на запуск</div>
+                    <div class="hero-stat-label">days to launch</div>
                 </div>
                 <div>
                     <div class="hero-stat-num">24/7</div>
-                    <div class="hero-stat-label">без перерывов</div>
+                    <div class="hero-stat-label">always running</div>
                 </div>
             </div>
 
@@ -683,141 +691,141 @@
 
         <!-- PROBLEMS -->
         <section id="problems">
-            <h2>Знакомо?</h2>
-            <div class="section-title">Проблемы, которые <span class="accent">решает OpenClaw</span></div>
-            <div class="section-desc">Если хотя бы один пункт про вас — автоматизация окупится в первый же месяц</div>
+            <h2>Sound familiar?</h2>
+            <div class="section-title">Problems <span class="accent">OpenClaw</span> solves</div>
+            <div class="section-desc">If even one of these applies to you — automation will pay for itself in the first month</div>
             <div class="problems-grid">
                 <div class="pain-card">
                     <div class="pain-icon">&#128172;</div>
-                    <div class="pain-title">Менеджеры не успевают</div>
-                    <div class="pain-desc">Клиенты пишут в чат, ждут ответа часами. Часть уходит к конкурентам</div>
+                    <div class="pain-title">Slow response times</div>
+                    <div class="pain-desc">Customers message you, wait hours for a reply. Some leave for competitors before you respond</div>
                 </div>
                 <div class="pain-card">
                     <div class="pain-icon">&#128337;</div>
-                    <div class="pain-title">Рутина съедает время</div>
-                    <div class="pain-desc">Одни и те же вопросы, одни и те же ответы. Команда тонет в повторах</div>
+                    <div class="pain-title">Routine eats your time</div>
+                    <div class="pain-desc">Same questions, same answers. Your team drowns in repetitive tasks every single day</div>
                 </div>
                 <div class="pain-card">
                     <div class="pain-icon">&#128176;</div>
-                    <div class="pain-title">Лиды теряются</div>
-                    <div class="pain-desc">Заявки приходят в разные каналы, никто не собирает их в одном месте</div>
+                    <div class="pain-title">Leads slip through</div>
+                    <div class="pain-desc">Requests come from multiple channels, nobody collects them in one place or follows up in time</div>
                 </div>
                 <div class="pain-card">
                     <div class="pain-icon">&#129302;</div>
-                    <div class="pain-title">AI — непонятно как</div>
-                    <div class="pain-desc">Все говорят про ботов, но как внедрить в бизнес — непонятно с чего начать</div>
+                    <div class="pain-title">AI feels unclear</div>
+                    <div class="pain-desc">Everyone talks about ChatGPT and bots, but how to actually implement them in your business?</div>
                 </div>
             </div>
         </section>
 
         <!-- HOW -->
         <section id="how">
-            <h2>Как мы работаем</h2>
-            <div class="section-title">Настройка <span class="accent">под ключ</span></div>
-            <div class="section-desc">Вы рассказываете о бизнесе — я делаю всё остальное</div>
+            <h2>How we work</h2>
+            <div class="section-title">Turnkey <span class="accent">setup</span></div>
+            <div class="section-desc">You tell me about your business — I handle everything else</div>
 
             <div class="value-grid">
                 <div class="value-card">
                     <div class="value-num">01</div>
-                    <h3>Под ваш бизнес</h3>
-                    <p>Не шаблон, а агент на ваших данных: товары, услуги, FAQ, tone of voice</p>
+                    <h3>Custom to you</h3>
+                    <p>Not a template — an agent trained on your data: products, services, FAQ, tone of voice</p>
                 </div>
                 <div class="value-card">
                     <div class="value-num">02</div>
-                    <h3>Без кода</h3>
-                    <p>Вам не нужно быть разработчиком. Вы даёте контент, я настраиваю платформу</p>
+                    <h3>No code needed</h3>
+                    <p>You don't need to be a developer. I configure the platform, you provide content and test</p>
                 </div>
                 <div class="value-card">
                     <div class="value-num">03</div>
-                    <h3>Работает 24/7</h3>
-                    <p>Бот отвечает мгновенно в любое время — ночью, в выходные, в праздники</p>
+                    <h3>Runs 24/7</h3>
+                    <p>The bot responds instantly at any time — nights, weekends, holidays, no breaks</p>
                 </div>
             </div>
 
             <div class="process-grid">
                 <div class="step-card">
                     <div class="step-num">01</div>
-                    <h3>Брифинг</h3>
-                    <p>Созвон 30 мин, разбираем бизнес и боли</p>
+                    <h3>Briefing</h3>
+                    <p>30 min call to understand your business and pain points</p>
                 </div>
                 <div class="step-card">
                     <div class="step-num">02</div>
-                    <h3>Настройка</h3>
-                    <p>Агенты, база знаний, сценарии, интеграции</p>
+                    <h3>Setup</h3>
+                    <p>Agents, knowledge base, scenarios, integrations</p>
                 </div>
                 <div class="step-card">
                     <div class="step-num">03</div>
-                    <h3>Тест</h3>
-                    <p>Прогоняем реальные диалоги, доводим до идеала</p>
+                    <h3>Testing</h3>
+                    <p>We run real conversations together, refine until perfect</p>
                 </div>
                 <div class="step-card">
                     <div class="step-num">04</div>
-                    <h3>Запуск</h3>
-                    <p>Подключаем к Telegram / сайту, я на связи</p>
+                    <h3>Launch</h3>
+                    <p>Connected to your Telegram / website, I stay on standby</p>
                 </div>
             </div>
         </section>
 
         <!-- INCLUDES -->
         <section id="includes">
-            <h2>Что входит</h2>
-            <div class="section-title">Полная настройка <span class="accent">OpenClaw</span></div>
-            <div class="section-desc">Всё, что нужно для запуска AI-агента в вашем бизнесе</div>
+            <h2>What's included</h2>
+            <div class="section-title">Full <span class="accent">OpenClaw</span> setup</div>
+            <div class="section-desc">Everything you need to launch an AI agent for your business</div>
             <div class="includes-grid">
                 <div class="include-card">
                     <div class="include-check">&#10003;</div>
                     <div class="include-text">
-                        <h4>AI-агент поддержки</h4>
-                        <p>Отвечает по базе знаний, 24/7, мгновенно</p>
+                        <h4>AI support agent</h4>
+                        <p>Answers customer questions from your knowledge base, 24/7</p>
                     </div>
                 </div>
                 <div class="include-card">
                     <div class="include-check">&#10003;</div>
                     <div class="include-text">
-                        <h4>База знаний</h4>
-                        <p>Документы, FAQ, описания — агент знает всё</p>
+                        <h4>Knowledge base</h4>
+                        <p>Your docs, FAQs, product descriptions — the agent knows it all</p>
                     </div>
                 </div>
                 <div class="include-card">
                     <div class="include-check">&#10003;</div>
                     <div class="include-text">
-                        <h4>Сценарии диалогов</h4>
-                        <p>Скрипты продаж, возражения, квалификация</p>
+                        <h4>Dialog scenarios</h4>
+                        <p>Sales scripts, objection handling, lead qualification</p>
                     </div>
                 </div>
                 <div class="include-card">
                     <div class="include-check">&#10003;</div>
                     <div class="include-text">
-                        <h4>Интеграция с Telegram</h4>
-                        <p>Ваш бот или новый. Личка и группы</p>
+                        <h4>Telegram integration</h4>
+                        <p>Your existing bot or a new one. DMs and groups</p>
                     </div>
                 </div>
                 <div class="include-card">
                     <div class="include-check">&#10003;</div>
                     <div class="include-text">
-                        <h4>Передача на человека</h4>
-                        <p>Сложный вопрос — бот передаёт оператору</p>
+                        <h4>Human handoff</h4>
+                        <p>Complex question? Bot seamlessly transfers to a live operator</p>
                     </div>
                 </div>
                 <div class="include-card">
                     <div class="include-check">&#10003;</div>
                     <div class="include-text">
-                        <h4>Аналитика и логи</h4>
-                        <p>Диалоги, метрики, популярные вопросы</p>
+                        <h4>Analytics & logs</h4>
+                        <p>All conversations, metrics, popular questions at a glance</p>
                     </div>
                 </div>
                 <div class="include-card">
                     <div class="include-check">&#10003;</div>
                     <div class="include-text">
-                        <h4>Обучение команды</h4>
-                        <p>Управление ботом, база знаний, аналитика</p>
+                        <h4>Team training</h4>
+                        <p>How to manage the bot, update knowledge base, read analytics</p>
                     </div>
                 </div>
                 <div class="include-card">
                     <div class="include-check">&#10003;</div>
                     <div class="include-text">
-                        <h4>Поддержка 2 недели</h4>
-                        <p>Доработки, исправления, консультации</p>
+                        <h4>2 weeks support</h4>
+                        <p>Tweaks, fixes, chat consultations — all included</p>
                     </div>
                 </div>
             </div>
@@ -825,48 +833,48 @@
 
         <!-- PRICING -->
         <section id="pricing">
-            <h2>Тарифы</h2>
-            <div class="section-title" style="text-align:center;">Выберите свой <span class="accent">формат</span></div>
-            <div class="section-desc" style="text-align:center; margin: 0 auto 32px;">Все тарифы включают настройку, тестирование и поддержку</div>
+            <h2>Pricing</h2>
+            <div class="section-title" style="text-align:center;">Choose your <span class="accent">plan</span></div>
+            <div class="section-desc" style="text-align:center; margin: 0 auto 32px;">All plans include setup, testing, and support</div>
             <div class="pricing-grid">
                 <div class="price-card">
-                    <div class="price-name">Старт</div>
-                    <div class="price-amount"><span class="currency">&#8381;</span>30 000</div>
-                    <div class="price-note">разовая настройка</div>
+                    <div class="price-name">Starter</div>
+                    <div class="price-amount"><span class="currency">$</span>350</div>
+                    <div class="price-note">one-time setup</div>
                     <ul class="price-features">
-                        <li><span class="check">&#10003;</span> 1 AI-агент</li>
-                        <li><span class="check">&#10003;</span> База до 50 документов</li>
-                        <li><span class="check">&#10003;</span> Telegram</li>
-                        <li><span class="check">&#10003;</span> 2 недели поддержки</li>
+                        <li><span class="check">&#10003;</span> 1 AI agent</li>
+                        <li><span class="check">&#10003;</span> Up to 50 documents</li>
+                        <li><span class="check">&#10003;</span> Telegram integration</li>
+                        <li><span class="check">&#10003;</span> 2 weeks support</li>
                     </ul>
-                    <a href="https://t.me/iaroslav" class="btn-outline" style="display:block;text-align:center;">Выбрать</a>
+                    <a href="https://t.me/iaroslav" class="btn-outline" style="display:block;text-align:center;">Choose</a>
                 </div>
                 <div class="price-card featured">
                     <div class="price-badge">// POPULAR</div>
-                    <div class="price-name">Бизнес</div>
-                    <div class="price-amount"><span class="currency">&#8381;</span>60 000</div>
-                    <div class="price-note">разовая настройка</div>
+                    <div class="price-name">Business</div>
+                    <div class="price-amount"><span class="currency">$</span>700</div>
+                    <div class="price-note">one-time setup</div>
                     <ul class="price-features">
-                        <li><span class="check">&#10003;</span> До 3 AI-агентов</li>
-                        <li><span class="check">&#10003;</span> Безлимит база знаний</li>
-                        <li><span class="check">&#10003;</span> Telegram + виджет</li>
-                        <li><span class="check">&#10003;</span> Сценарии продаж</li>
-                        <li><span class="check">&#10003;</span> 1 месяц поддержки</li>
+                        <li><span class="check">&#10003;</span> Up to 3 AI agents</li>
+                        <li><span class="check">&#10003;</span> Unlimited knowledge base</li>
+                        <li><span class="check">&#10003;</span> Telegram + site widget</li>
+                        <li><span class="check">&#10003;</span> Sales scenarios</li>
+                        <li><span class="check">&#10003;</span> 1 month support</li>
                     </ul>
-                    <a href="https://t.me/iaroslav" class="btn-primary" style="display:block;text-align:center;">Выбрать</a>
+                    <a href="https://t.me/iaroslav" class="btn-primary" style="display:block;text-align:center;">Choose</a>
                 </div>
                 <div class="price-card">
-                    <div class="price-name">Премиум</div>
-                    <div class="price-amount"><span class="currency">&#8381;</span>120 000</div>
-                    <div class="price-note">настройка + поддержка</div>
+                    <div class="price-name">Premium</div>
+                    <div class="price-amount"><span class="currency">$</span>1,400</div>
+                    <div class="price-note">setup + ongoing support</div>
                     <ul class="price-features">
-                        <li><span class="check">&#10003;</span> Безлимит агенты</li>
-                        <li><span class="check">&#10003;</span> CRM, sheets интеграции</li>
-                        <li><span class="check">&#10003;</span> Все каналы</li>
-                        <li><span class="check">&#10003;</span> Приоритет 3 мес</li>
-                        <li><span class="check">&#10003;</span> Оптимизация</li>
+                        <li><span class="check">&#10003;</span> Unlimited agents</li>
+                        <li><span class="check">&#10003;</span> CRM & sheets integrations</li>
+                        <li><span class="check">&#10003;</span> All channels</li>
+                        <li><span class="check">&#10003;</span> Priority support 3 mo</li>
+                        <li><span class="check">&#10003;</span> Monthly optimization</li>
                     </ul>
-                    <a href="https://t.me/iaroslav" class="btn-outline" style="display:block;text-align:center;">Выбрать</a>
+                    <a href="https://t.me/iaroslav" class="btn-outline" style="display:block;text-align:center;">Choose</a>
                 </div>
             </div>
         </section>
@@ -874,58 +882,58 @@
         <!-- FAQ -->
         <section id="faq">
             <h2>FAQ</h2>
-            <div class="section-title">Частые <span class="accent">вопросы</span></div>
+            <div class="section-title">Common <span class="accent">questions</span></div>
             <div class="faq-list">
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        Что такое OpenClaw?
+                        What is OpenClaw?
                         <span class="faq-icon">+</span>
                     </button>
-                    <div class="faq-answer"><div class="faq-answer-inner">OpenClaw — платформа для AI-агентов в Telegram, на сайте и в других каналах. Агент знает всё о вашем бизнесе и общается с клиентами как менеджер — только быстрее и без выходных.</div></div>
+                    <div class="faq-answer"><div class="faq-answer-inner">OpenClaw is a platform for building AI agents that work in Telegram, on your website, and across other channels. The agent knows everything about your business and talks to customers like a live manager — only faster and without days off.</div></div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        Нужно ли разбираться в AI или коде?
+                        Do I need to know AI or programming?
                         <span class="faq-icon">+</span>
                     </button>
-                    <div class="faq-answer"><div class="faq-answer-inner">Нет. Я настраиваю всё сам. Вам нужно предоставить информацию о бизнесе и протестировать результат. Управление ботом интуитивно понятное.</div></div>
+                    <div class="faq-answer"><div class="faq-answer-inner">No. I handle all the setup. You just provide business information and test the result. Managing the bot after launch is intuitive and straightforward.</div></div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        Как быстро будет готово?
+                        How fast can you deliver?
                         <span class="faq-icon">+</span>
                     </button>
-                    <div class="faq-answer"><div class="faq-answer-inner">Старт — 3-5 дней. Бизнес — 5-7 дней. Премиум — от 7 дней. Сроки с момента получения материалов.</div></div>
+                    <div class="faq-answer"><div class="faq-answer-inner">Starter — 3-5 business days. Business — 5-7 days. Premium — from 7 days depending on integration complexity. Timeline starts once all materials are received.</div></div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        А если бот ответит неправильно?
+                        What if the bot gives a wrong answer?
                         <span class="faq-icon">+</span>
                     </button>
-                    <div class="faq-answer"><div class="faq-answer-inner">Агент обучен на ваших данных и не выдумывает. Если вопрос за рамками — бот передаёт оператору. На тестировании прогоняем все сценарии.</div></div>
+                    <div class="faq-answer"><div class="faq-answer-inner">The agent is trained strictly on your data and doesn't hallucinate. If a question falls outside the knowledge base, it honestly says it doesn't know and hands off to a live operator. We test all scenarios before launch.</div></div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        Какие каналы?
+                        Which channels are supported?
                         <span class="faq-icon">+</span>
                     </button>
-                    <div class="faq-answer"><div class="faq-answer-inner">Telegram, виджет на сайт, WhatsApp, Instagram Direct. Несколько каналов к одному агенту — диалоги везде одновременно.</div></div>
+                    <div class="faq-answer"><div class="faq-answer-inner">Telegram (bots and groups), website widget, WhatsApp, Instagram Direct. You can connect multiple channels to one agent — it handles conversations everywhere simultaneously.</div></div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        Сколько стоит после настройки?
+                        What are the ongoing costs?
                         <span class="faq-icon">+</span>
                     </button>
-                    <div class="faq-answer"><div class="faq-answer-inner">Платформа тарифицируется по количеству сообщений. Для большинства бизнесов 3 000-10 000 &#8381;/мес. Точную стоимость рассчитаем на брифинге.</div></div>
+                    <div class="faq-answer"><div class="faq-answer-inner">The OpenClaw platform is billed separately based on message volume. For most businesses it's $30-100/month. We'll calculate the exact cost during the briefing based on your expected volume.</div></div>
                 </div>
             </div>
         </section>
 
         <!-- CTA -->
         <div class="cta-final">
-            <h3>Запустите AI-агента<br>для вашего бизнеса</h3>
-            <p>Напишите — обсудим задачу, покажу демо и рассчитаю стоимость. Бесплатно и без обязательств</p>
-            <a href="https://t.me/iaroslav" class="btn-primary">Написать в Telegram</a>
+            <h3>Launch an AI agent<br>for your business</h3>
+            <p>Message me — we'll discuss your project, I'll show a demo and calculate the cost. Free, no obligations</p>
+            <a href="https://t.me/iaroslav" class="btn-primary">Message on Telegram</a>
         </div>
 
         <!-- STATUS / FOOTER -->
@@ -936,7 +944,7 @@
         </div>
 
         <footer>
-            <span>ИП Шолудченко Я. А.</span>
+            <span>Iaroslav Sholudchenko</span>
             <a href="https://t.me/iaroslav">@iaroslav</a>
             <span>[ end of transmission ]</span>
         </footer>
@@ -970,7 +978,7 @@
         }
     }
 
-    // Skill-style glitch on pain cards
+    // Glitch on pain card titles
     document.querySelectorAll('.pain-title').forEach(el => {
         el.addEventListener('mouseenter', () => {
             const original = el.textContent;
