@@ -15,9 +15,9 @@
             --text: #d0d0d8;
             --muted: #6a6a78;
             --cyan: #00c8d4;
-            --magenta: #e0306e;
+            --magenta: #ff2d7b;
             --cyan-glow: rgba(0, 200, 212, 0.08);
-            --magenta-glow: rgba(224, 48, 110, 0.06);
+            --magenta-glow: rgba(255, 45, 123, 0.08);
         }
 
         body {
@@ -179,13 +179,14 @@
             margin-bottom: 4px;
             line-height: 1.2;
         }
-        .hero h1 .accent { color: var(--magenta); text-shadow: 0 0 30px rgba(224, 48, 110, 0.2); }
+        .hero h1 .accent { color: var(--magenta); text-shadow: 0 0 10px rgba(255, 45, 123, 0.6), 0 0 30px rgba(255, 45, 123, 0.3); }
 
         .hero .sub {
             font-family: 'Orbitron', sans-serif;
             font-size: 0.8rem;
             font-weight: 400;
             color: var(--magenta);
+            text-shadow: 0 0 8px rgba(255, 45, 123, 0.4), 0 0 20px rgba(255, 45, 123, 0.15);
             letter-spacing: 0.2em;
             text-transform: uppercase;
             margin-bottom: 28px;
@@ -203,7 +204,7 @@
             font-size: 0.85rem;
             margin-bottom: 28px;
         }
-        .hero .price-hint strong { color: var(--magenta); }
+        .hero .price-hint strong { color: var(--magenta); text-shadow: 0 0 8px rgba(255, 45, 123, 0.4); }
 
         .hero-actions {
             display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 36px;
@@ -309,9 +310,10 @@
             text-transform: uppercase;
             letter-spacing: 0.25em;
             color: var(--magenta);
+            text-shadow: 0 0 8px rgba(255, 45, 123, 0.4), 0 0 20px rgba(255, 45, 123, 0.15);
             margin-bottom: 24px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(224, 48, 110, 0.15);
+            border-bottom: 1px solid rgba(255, 45, 123, 0.15);
         }
         section h2::before {
             content: '// ';
@@ -323,7 +325,7 @@
             font-size: 1.4rem; font-weight: 900; color: #fff;
             letter-spacing: 0.04em; margin-bottom: 8px;
         }
-        section .section-title .accent { color: var(--magenta); text-shadow: 0 0 20px rgba(224, 48, 110, 0.2); }
+        section .section-title .accent { color: var(--magenta); text-shadow: 0 0 10px rgba(255, 45, 123, 0.6), 0 0 30px rgba(255, 45, 123, 0.3); }
 
         section .section-desc {
             font-size: 0.85rem; color: var(--muted); margin-bottom: 32px; max-width: 560px;
@@ -367,14 +369,14 @@
         .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 36px; }
         .value-card {
             background: var(--magenta-glow);
-            border: 1px solid rgba(224, 48, 110, 0.12);
+            border: 1px solid rgba(255, 45, 123, 0.12);
             padding: 28px;
             clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
         }
         .value-num {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.2rem; font-weight: 900; color: var(--magenta);
-            margin-bottom: 12px; text-shadow: 0 0 15px rgba(224, 48, 110, 0.2);
+            margin-bottom: 12px; text-shadow: 0 0 10px rgba(255, 45, 123, 0.5), 0 0 25px rgba(255, 45, 123, 0.2);
         }
         .value-card h3 {
             font-family: 'Orbitron', sans-serif;
@@ -449,14 +451,15 @@
         .price-card.featured {
             border-color: var(--magenta);
             background: var(--magenta-glow);
-            box-shadow: 0 0 40px rgba(224, 48, 110, 0.08);
+            box-shadow: 0 0 40px rgba(255, 45, 123, 0.08);
         }
         .price-card.featured::before { background: var(--magenta); opacity: 1; }
         .price-badge {
             position: absolute; top: 12px; right: 16px;
             font-size: 0.6rem; color: var(--magenta);
+            text-shadow: 0 0 6px rgba(255, 45, 123, 0.4);
             letter-spacing: 0.1em; text-transform: uppercase;
-            border: 1px solid rgba(224, 48, 110, 0.2);
+            border: 1px solid rgba(255, 45, 123, 0.25);
             padding: 3px 10px;
         }
         .price-name {
@@ -471,7 +474,7 @@
             font-size: 2rem; font-weight: 900; color: #fff;
             margin-bottom: 4px;
         }
-        .price-amount .currency { font-size: 1.2rem; color: var(--magenta); }
+        .price-amount .currency { font-size: 1.2rem; color: var(--magenta); text-shadow: 0 0 8px rgba(255, 45, 123, 0.4); }
         .price-note { font-size: 0.7rem; color: var(--muted); margin-bottom: 20px; }
         .price-features { list-style: none; margin-bottom: 24px; }
         .price-features li {
@@ -566,7 +569,7 @@
         footer a {
             color: var(--magenta);
             text-decoration: none;
-            text-shadow: 0 0 8px rgba(224, 48, 110, 0.2);
+            text-shadow: 0 0 8px rgba(255, 45, 123, 0.5), 0 0 20px rgba(255, 45, 123, 0.2);
         }
         footer a:hover { text-decoration: underline; }
 
