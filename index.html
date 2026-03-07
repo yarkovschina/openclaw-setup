@@ -595,6 +595,136 @@
             max-width: 500px; margin-left: auto; margin-right: auto;
         }
 
+        /* === DISCOUNT POPUP === */
+        .popup-overlay {
+            position: fixed; inset: 0; z-index: 400;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center;
+        }
+        .popup-overlay.active { display: flex; }
+        .popup-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 40px 36px;
+            max-width: 380px; width: 90%;
+            text-align: center;
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+        }
+        .popup-close {
+            position: absolute; top: 12px; right: 16px;
+            background: none; border: none;
+            color: var(--muted); font-size: 1.2rem;
+            cursor: pointer; font-family: 'Share Tech Mono', monospace;
+        }
+        .popup-close:hover { color: var(--text); }
+        .popup-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem; font-weight: 900;
+            color: var(--cyan);
+            text-shadow: 0 0 20px rgba(0, 200, 212, 0.3);
+            margin-bottom: 8px;
+        }
+        .popup-sub {
+            font-size: 0.8rem; color: var(--muted);
+            margin-bottom: 24px;
+        }
+        .popup-game {
+            margin-bottom: 24px;
+        }
+        .claw-track {
+            width: 100%; height: 160px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .claw-arm {
+            position: absolute; top: 0;
+            width: 3px; height: 30px;
+            background: var(--cyan);
+            box-shadow: 0 0 8px rgba(0, 200, 212, 0.5);
+            left: 50%;
+            transition: left 0.05s linear;
+        }
+        .claw-hook {
+            position: absolute; top: 30px;
+            font-size: 18px;
+            transform: translateX(-50%);
+            left: 50%;
+            transition: left 0.05s linear, top 0.4s ease-in;
+        }
+        .claw-prizes {
+            position: absolute; bottom: 12px;
+            left: 0; right: 0;
+            display: flex; justify-content: space-around;
+            padding: 0 20px;
+        }
+        .claw-prize {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem; font-weight: 700;
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+        .claw-prize.target {
+            border-color: var(--magenta);
+            color: var(--magenta);
+            text-shadow: 0 0 8px rgba(255, 45, 123, 0.4);
+            box-shadow: 0 0 12px rgba(255, 45, 123, 0.1);
+        }
+        .popup-play-btn {
+            display: inline-block;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            padding: 12px 32px;
+            background: var(--cyan);
+            color: #fff;
+            border: none; cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.25s;
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        }
+        .popup-play-btn:hover {
+            background: #00a8b4;
+            box-shadow: 0 0 25px rgba(0, 200, 212, 0.3);
+        }
+        .popup-play-btn:disabled {
+            opacity: 0.4; cursor: default;
+        }
+        .popup-result {
+            display: none;
+        }
+        .popup-result.active { display: block; }
+        .popup-result-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem; font-weight: 900;
+            color: var(--magenta);
+            text-shadow: 0 0 20px rgba(255, 45, 123, 0.5), 0 0 50px rgba(255, 45, 123, 0.2);
+            margin-bottom: 8px;
+        }
+        .popup-code {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem; font-weight: 900;
+            color: var(--cyan);
+            text-shadow: 0 0 15px rgba(0, 200, 212, 0.5);
+            background: rgba(0, 200, 212, 0.08);
+            border: 1px solid rgba(0, 200, 212, 0.2);
+            padding: 12px 24px;
+            display: inline-block;
+            margin: 12px 0 16px;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+        }
+        .popup-code-hint {
+            font-size: 0.65rem;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
         /* === STATUS / FOOTER === */
         .status-bar {
             padding: 16px 20px;
@@ -1015,6 +1145,35 @@
         </footer>
     </div>
 
+    <!-- DISCOUNT POPUP -->
+    <div class="popup-overlay" id="discountPopup">
+        <div class="popup-box">
+            <button class="popup-close" onclick="closePopup()">&times;</button>
+            <div id="popupIntro">
+                <div class="popup-title">Want a discount?</div>
+                <div class="popup-sub">Catch the prize with the claw to unlock your deal</div>
+                <div class="popup-game">
+                    <div class="claw-track" id="clawTrack">
+                        <div class="claw-arm" id="clawArm"></div>
+                        <div class="claw-hook" id="clawHook">&#129518;</div>
+                        <div class="claw-prizes">
+                            <div class="claw-prize">5%</div>
+                            <div class="claw-prize target">15%</div>
+                            <div class="claw-prize">10%</div>
+                        </div>
+                    </div>
+                    <button class="popup-play-btn" id="clawBtn" onclick="dropClaw()">Drop the claw!</button>
+                </div>
+            </div>
+            <div class="popup-result" id="popupResult">
+                <div class="popup-result-title">You got 15% off!</div>
+                <div class="popup-code" id="discountCode" onclick="copyCode()">CLAW15</div>
+                <div class="popup-code-hint">click to copy</div>
+                <a href="https://t.me/iaroslav" class="popup-play-btn">Claim on Telegram</a>
+            </div>
+        </div>
+    </div>
+
     <!-- NEO EASTER EGG -->
     <div class="neo-overlay" id="neoOverlay">
         <canvas class="neo-canvas" id="neoCanvas" width="224" height="128"></canvas>
@@ -1048,6 +1207,96 @@
             answer.style.maxHeight = answer.scrollHeight + 'px';
         }
     }
+
+    // === DISCOUNT CLAW GAME ===
+    (function() {
+        const popup = document.getElementById('discountPopup');
+        const arm = document.getElementById('clawArm');
+        const hook = document.getElementById('clawHook');
+        const track = document.getElementById('clawTrack');
+        const btn = document.getElementById('clawBtn');
+        let clawPos = 0, clawDir = 1, clawInterval = null, dropping = false;
+
+        // Show popup after 20 seconds
+        const popupTimer = setTimeout(() => {
+            if (!document.getElementById('neoOverlay').classList.contains('active')) {
+                popup.classList.add('active');
+                startClaw();
+            }
+        }, 20000);
+
+        // Also show on scroll past 60% of page
+        let popupShown = false;
+        window.addEventListener('scroll', function onScroll() {
+            if (popupShown) return;
+            const scrollPct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+            if (scrollPct > 0.6) {
+                popupShown = true;
+                clearTimeout(popupTimer);
+                if (!document.getElementById('neoOverlay').classList.contains('active')) {
+                    popup.classList.add('active');
+                    startClaw();
+                }
+            }
+        });
+
+        function startClaw() {
+            const trackW = track.offsetWidth;
+            clawPos = trackW / 2;
+            clawInterval = setInterval(() => {
+                if (dropping) return;
+                clawPos += clawDir * 3;
+                if (clawPos > trackW - 20) clawDir = -1;
+                if (clawPos < 20) clawDir = 1;
+                arm.style.left = clawPos + 'px';
+                hook.style.left = clawPos + 'px';
+            }, 30);
+        }
+
+        window.dropClaw = function() {
+            if (dropping) return;
+            dropping = true;
+            btn.disabled = true;
+            btn.textContent = 'Dropping...';
+
+            // Animate hook dropping
+            hook.style.top = '110px';
+            arm.style.height = '110px';
+
+            setTimeout(() => {
+                // Always win — pull back up
+                hook.style.top = '30px';
+                arm.style.height = '30px';
+
+                setTimeout(() => {
+                    // Show result
+                    clearInterval(clawInterval);
+                    document.getElementById('popupIntro').style.display = 'none';
+                    document.getElementById('popupResult').classList.add('active');
+                }, 500);
+            }, 800);
+        };
+
+        window.closePopup = function() {
+            popup.classList.remove('active');
+            clearInterval(clawInterval);
+            dropping = false;
+        };
+
+        window.copyCode = function() {
+            navigator.clipboard.writeText('CLAW15').then(() => {
+                const code = document.getElementById('discountCode');
+                const orig = code.textContent;
+                code.textContent = 'COPIED!';
+                setTimeout(() => code.textContent = orig, 1500);
+            });
+        };
+
+        // Close on ESC
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && popup.classList.contains('active')) closePopup();
+        });
+    })();
 
     // Glitch on pain card titles
     document.querySelectorAll('.pain-title').forEach(el => {
