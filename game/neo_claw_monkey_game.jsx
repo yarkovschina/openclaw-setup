@@ -129,7 +129,7 @@ function SpriteCanvas({ sprite, palette, ps, flipX = false, style = {} }) {
   return <canvas ref={ref} style={{ imageRendering: "pixelated", ...style }} />;
 }
 
-const TASKS = ["Планирование встреч","Поиск информации","Разбор почты","Календарь и слоты","Сводка созвонов","Фоллоу-апы","Подготовка отчётов","Ресёрч конкурентов","Постановка задач","Контроль дедлайнов","Составление ТЗ","Сбор требований","Сортировка лидов","Ответы клиентам","Обновление CRM","Триаж запросов","Подбор подрядчиков","Синхронизация команды","Поиск багов","Брифинг руководителю"];
+const TASKS = ["Schedule meetings","Research info","Sort inbox","Calendar slots","Call summaries","Follow-ups","Prepare reports","Competitor research","Task planning","Deadline tracking","Write specs","Gather requirements","Sort leads","Reply to clients","Update CRM","Triage requests","Find contractors","Sync the team","Bug tracking","Brief the boss"];
 
 const W = 920, H = 560, GY = 470;
 const MPS = 3, NPS = MPS * 1.05, PPS = 2;
@@ -162,7 +162,7 @@ function Game() {
   const [keys, sKy] = useState({ l:0, r:0, u:0, a:0 });
   const [nid, sNid] = useState(3);
   const [bid, sBid] = useState(1);
-  const [msg, sMsg] = useState("Мети клешню и добивай обезьян во время перезарядки. Лови золотую клешню!");
+  const [msg, sMsg] = useState("Throw claws at monkeys during reload. Grab the golden claw for a super strike!");
   const [gs, sGs] = useState("playing");
   const [sc, sSc] = useState(null);
   const [ex, sEx] = useState([]);
@@ -188,7 +188,7 @@ function Game() {
   const reset = useCallback(() => {
     const fe=[mkE(1,0),mkE(2,0)], fp={x:W/2-PW/2,y:GY-PH,vy:0,f:1,inv:0,cd:0,at:0};
     sL(ML);sK(0);sP(fp);sE(fe);sB([]);sNid(3);sBid(1);
-    sMsg("Мети клешню и добивай обезьян во время перезарядки. Лови золотую клешню!");
+    sMsg("Throw claws at monkeys during reload. Grab the golden claw for a super strike!");
     sGs("playing");sSc(null);sEx([]);sGl(0);sSh({x:0,y:0});sct.current=SI*.55;
     R.p.current=fp;R.e.current=fe;R.b.current=[];R.i.current={nid:3,bid:1};
     R.s.current={gs:"playing",kills:0,lives:ML};R.sc.current=null;R.ex.current=[];R.gl.current=0;
@@ -247,7 +247,7 @@ function Game() {
       if(sct.current<=0&&!lsc){
         lsc={x:rn(100,W-140),y:GY-SS,active:1};
         sct.current=SI+rn(-3000,3000);
-        lm="⚡ Золотая клешня! Наступи на неё!";
+        lm="⚡ Golden claw appeared! Step on it!";
       }
 
       if(lsc&&lsc.active){
@@ -258,7 +258,7 @@ function Game() {
           for(let i=0;i<EXC;i++)lex.push(mkEx(cx,cy,i,EXC));
           ce.forEach(e=>{for(let i=0;i<6;i++)lex.push(mkEx(e.x+EW/2,e.y+EH/2,i,6));});
           ce=[];cb=cb.filter(b=>b.kind!=="enemy");lsc=null;lgl=GD;
-          lm=lg==="won"?"Поздравляем! Ты выбил приз — скидку 15%.":"💥 СУПЕР-КЛЕШНЯ! Уничтожено "+kc+" обезьян!";
+          lm=lg==="won"?"Congratulations! You won the prize — 15% off.":"💥 SUPER CLAW! Destroyed "+kc+" monkeys!";
         }
       }
 
@@ -281,15 +281,15 @@ function Game() {
         const m={...b,x:b.x+b.dir*b.speed,rot:(b.rot||0)+(b.kind==="claw"?28:0)};
         if(m.kind==="enemy"&&m.x>cp.x&&m.x<cp.x+PW&&m.y>cp.y&&m.y<cp.y+PH&&cp.inv<=0){
           cp.inv=1200;ll-=1;
-          if(ll<=0){ll=0;lg="lost";lm="open//neo пал. Обезьяны победили.";}
-          else{lm="Попадание! Уходи и кидай клешню в окно перезарядки.";}continue;
+          if(ll<=0){ll=0;lg="lost";lm="open//neo is down. The monkeys won.";}
+          else{lm="Hit! Dodge and throw claws during reload windows.";}continue;
         }
         if(m.kind==="claw"){let hi=-1;
           for(let i=0;i<ce.length;i++){const e=ce[i];
             if(e.phase==="reloading"&&m.x>e.x-10&&m.x<e.x+EW+10&&m.y>e.y&&m.y<e.y+EH){hi=i;break;}}
           if(hi!==-1){ce.splice(hi,1);lk+=1;
-            if(lk>=WK){lk=WK;lg="won";lm="Поздравляем! Ты выбил приз — скидку 15%.";}
-            else{lm="Точное попадание! Продолжай — цель 15 обезьян.";}continue;}}
+            if(lk>=WK){lk=WK;lg="won";lm="Congratulations! You won the prize — 15% off.";}
+            else{lm="Direct hit! Keep going — target is 15 monkeys.";}continue;}}
         if(m.x>-40&&m.x<W+40&&lg==="playing")surv.push(m);
       }
       cb=surv;
@@ -309,126 +309,274 @@ function Game() {
   const prog=useMemo(()=>cl((kills/WK)*100,0,100),[kills]);
   const ga=gl>0,gi=gl/GD;
 
+
+// NEO_HEAD for death screen (rows 0-18 only)
+const NEO_HEAD = [
+  [_,_,_,_,_,_,_,_,_,1,1,1,1,1,1,1,1,_,_,_,_,_,_,_,_,_],
+  [_,_,_,_,_,_,_,_,1,1,13,1,1,1,13,1,1,1,_,_,_,_,_,_,_,_],
+  [_,_,_,_,_,_,_,1,1,13,1,1,1,1,1,1,13,1,1,_,_,_,_,_,_,_],
+  [_,_,_,_,_,_,_,1,1,1,1,1,1,1,1,1,1,1,1,_,_,_,_,_,_,_],
+  [_,_,_,_,_,_,1,1,1,1,1,1,1,1,1,1,1,1,1,1,_,_,_,_,_,_],
+  [_,_,_,_,_,_,1,1,2,2,2,2,2,2,2,2,2,2,1,1,_,_,_,_,_,_],
+  [_,_,_,_,_,_,1,2,2,2,2,2,2,2,2,2,2,2,2,1,_,_,_,_,_,_],
+  [_,_,_,_,_,_,1,2,10,11,10,2,2,2,10,11,10,2,2,1,_,_,_,_,_,_],
+  [_,_,_,_,_,_,1,2,10,11,10,2,2,2,10,11,10,2,2,1,_,_,_,_,_,_],
+  [_,_,_,_,_,_,1,2,2,2,2,2,2,2,2,2,2,2,2,1,_,_,_,_,_,_],
+  [_,_,_,_,_,_,1,2,2,2,2,2,3,2,2,2,2,2,2,1,_,_,_,_,_,_],
+  [_,_,_,_,_,_,1,2,2,2,2,3,3,3,2,2,2,2,2,1,_,_,_,_,_,_],
+  [_,_,_,_,_,_,1,1,2,2,2,2,2,2,2,2,2,2,1,1,_,_,_,_,_,_],
+  [_,_,_,_,_,_,_,_,1,2,2,2,2,2,2,2,2,1,_,_,_,_,_,_,_,_],
+  [_,_,_,_,_,5,6,5,1,14,14,14,14,14,14,14,14,1,5,6,5,_,_,_,_,_],
+  [_,_,_,_,5,6,7,6,5,14,14,14,14,14,14,14,14,5,6,7,6,5,_,_,_,_],
+  [_,_,_,_,5,6,7,6,5,14,14,14,14,14,14,14,14,5,6,7,6,5,_,_,_,_],
+  [_,_,_,4,5,6,7,6,5,14,14,14,14,14,14,14,14,5,6,7,6,5,4,_,_,_],
+  [_,_,_,4,5,6,7,6,5,14,14,14,14,14,14,14,14,5,6,7,6,5,4,_,_,_],
+];
+
+const PILE = [
+  {x:-10,y:260,r:-8,s:2.8,f:0},{x:35,y:265,r:20,s:2.5,f:1},{x:78,y:258,r:-15,s:3,f:0},
+  {x:122,y:263,r:12,s:2.6,f:1},{x:165,y:260,r:-5,s:2.9,f:0},{x:208,y:264,r:18,s:2.5,f:1},
+  {x:248,y:258,r:-20,s:2.8,f:0},{x:288,y:262,r:10,s:2.7,f:1},{x:325,y:260,r:-12,s:2.5,f:0},
+  {x:12,y:252,r:32,s:2.2,f:1},{x:56,y:248,r:-25,s:2.4,f:0},{x:100,y:252,r:15,s:2.3,f:1},
+  {x:144,y:248,r:-18,s:2.5,f:0},{x:186,y:252,r:28,s:2.2,f:1},{x:228,y:248,r:-30,s:2.4,f:0},
+  {x:268,y:252,r:12,s:2.3,f:1},{x:306,y:250,r:-22,s:2.2,f:0},
+  {x:18,y:228,r:25,s:2.7,f:1},{x:62,y:222,r:-12,s:2.8,f:0},{x:108,y:228,r:8,s:2.5,f:1},
+  {x:152,y:224,r:-22,s:2.7,f:0},{x:195,y:222,r:18,s:2.6,f:1},{x:238,y:226,r:-10,s:2.8,f:0},
+  {x:278,y:224,r:15,s:2.5,f:1},
+  {x:40,y:218,r:-32,s:2,f:0},{x:130,y:216,r:28,s:2.1,f:1},{x:218,y:220,r:-18,s:2,f:0},{x:258,y:218,r:22,s:2.1,f:1},
+  {x:42,y:198,r:-15,s:2.7,f:0},{x:88,y:194,r:22,s:2.5,f:1},{x:135,y:200,r:-8,s:2.8,f:0},
+  {x:180,y:196,r:15,s:2.6,f:1},{x:224,y:198,r:-25,s:2.5,f:0},{x:264,y:195,r:10,s:2.4,f:1},
+  {x:65,y:190,r:30,s:2,f:1},{x:158,y:188,r:-26,s:2.1,f:0},{x:244,y:192,r:18,s:2,f:1},
+  {x:68,y:170,r:12,s:2.6,f:0},{x:115,y:166,r:-20,s:2.7,f:1},{x:162,y:172,r:8,s:2.5,f:0},
+  {x:208,y:168,r:-15,s:2.6,f:1},{x:248,y:170,r:22,s:2.3,f:0},
+  {x:92,y:162,r:-28,s:2,f:1},{x:185,y:160,r:25,s:2.1,f:0},
+  {x:92,y:142,r:-10,s:2.5,f:0},{x:140,y:138,r:18,s:2.6,f:1},{x:185,y:144,r:-22,s:2.4,f:0},
+  {x:225,y:140,r:12,s:2.3,f:1},
+  {x:115,y:134,r:26,s:2,f:0},{x:205,y:132,r:-16,s:2.1,f:1},
+  {x:112,y:115,r:15,s:2.4,f:1},{x:160,y:110,r:-12,s:2.5,f:0},{x:205,y:116,r:20,s:2.3,f:1},
+  {x:138,y:106,r:-24,s:2,f:0},{x:185,y:108,r:10,s:2,f:1},
+  {x:125,y:88,r:18,s:2.3,f:0},{x:168,y:84,r:-15,s:2.4,f:1},{x:208,y:90,r:8,s:2.2,f:0},
+  {x:148,y:80,r:-22,s:1.9,f:0},{x:190,y:78,r:14,s:1.9,f:1},
+];
+
+const GLC = "@#$%&!?*<>~^{}|/\\";
+function GlitchTitle() {
+  const [gt, sGt] = useState("ick");
+  const [ig, sIg] = useState(false);
+  useEffect(() => {
+    const t = setInterval(() => {
+      sIg(true); let f = 0;
+      const iv = setInterval(() => {
+        sGt("ick".split("").map(c => Math.random() > .35 ? GLC[Math.floor(Math.random() * GLC.length)] : c).join(""));
+        f++; if (f > 6) { clearInterval(iv); sGt("ick"); sIg(false); }
+      }, 60);
+    }, 2200);
+    return () => clearInterval(t);
+  }, []);
   return (
-    <div className="min-h-screen bg-neutral-950 text-white p-4" style={{fontFamily:"'Courier New',monospace"}}>
-      <div className="max-w-6xl mx-auto space-y-4">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <h2 style={{fontSize:24,fontWeight:800,letterSpacing:".06em",color:"#fff",textShadow:"0 0 20px rgba(192,24,80,.25)",textTransform:"uppercase",margin:0}}>
+      Buried under{" "}
+      <span style={{textDecoration:"line-through",opacity:.5,display:"inline"}}>
+        <span style={{color:"#c01850"}}>d</span>
+        <span style={{display:"inline",color:"#c01850",textShadow:ig?"2px 0 #0088a0,-2px 0 #c01850":"none",transition:"text-shadow .05s"}}>{gt}</span>
+        <span style={{color:"#c01850"}}>s</span>
+      </span>{" "}
+      <span style={{color:"#c01850"}}>tasks</span>
+    </h2>
+  );
+}
+
+  const prog=useMemo(()=>cl((kills/WK)*100,0,100),[kills]);
+  const ga=gl>0,gi=gl/GD;
+  const F = "'Share Tech Mono','Courier New',monospace";
+
+  return (
+    <div style={{minHeight:"100vh",background:"#0a0a0f",color:"#e0e0e0",padding:16,fontFamily:F,position:"relative"}}>
+      {/* Scanlines */}
+      <div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:50,background:"repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)"}}/>
+
+      <div style={{maxWidth:1100,margin:"0 auto"}}>
+        {/* Header */}
+        <div style={{display:"flex",flexWrap:"wrap",justifyContent:"space-between",alignItems:"center",gap:12,marginBottom:16}}>
           <div>
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight">open//neo vs claw monkeys</h1>
-            <p className="text-neutral-400 mt-2 max-w-3xl text-sm">Обезьяны стреляют в open//neo. Добивай их клешнёй во время перезарядки. Лови золотую клешню для суперудара!</p>
+            <div style={{fontSize:11,letterSpacing:".25em",color:"#0088a0",textTransform:"uppercase",marginBottom:6}}>// open//neo vs monkey work</div>
+            <h1 style={{fontSize:32,fontWeight:800,letterSpacing:".04em",color:"#fff",margin:0}}>
+              Destroy the <span style={{color:"#c01850"}}>monkey work</span>
+            </h1>
+            <p style={{fontSize:13,color:"rgba(255,255,255,.4)",marginTop:6,letterSpacing:".03em"}}>
+              Kill task monkeys during reload. Grab the golden claw for a super strike.
+            </p>
           </div>
-          <div className="flex flex-wrap gap-2 text-xs">
-            {["← → двигаться","↑/Space прыгать","Enter/F клешня","R рестарт"].map(t=>(
-              <span key={t} className="px-3 py-1 rounded-full border border-neutral-700 bg-neutral-900">{t}</span>))}
+          <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+            {["← → move","↑/Space jump","Enter/F claw","R restart"].map(t=>(
+              <span key={t} style={{padding:"5px 12px",fontSize:11,letterSpacing:".1em",border:"1px solid rgba(0,136,160,.25)",borderRadius:4,background:"rgba(0,136,160,.06)",color:"#0088a0"}}>{t}</span>))}
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-4">
-          <div className="bg-neutral-900/90 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden p-3">
-            <div className="relative rounded-xl overflow-hidden border border-neutral-800" style={{
-              width:"100%",height:H,background:"linear-gradient(180deg,#0a0a12 0%,#111118 60%,#1a1a24 100%)",
-              transform:`translate(${sh.x}px,${sh.y}px)`,transition:ga?"none":"transform .1s ease-out"}}>
-              <div className="absolute inset-0 opacity-10" style={{backgroundImage:"linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px)",backgroundSize:"32px 32px"}}/>
-              {ga&&<><div className="absolute inset-0 z-30 pointer-events-none" style={{background:`rgba(255,0,50,${.1*gi})`,transform:`translateX(${Math.round((Math.random()-.5)*10*gi)}px)`,mixBlendMode:"screen"}}/><div className="absolute inset-0 z-30 pointer-events-none" style={{background:`rgba(0,255,100,${.07*gi})`,transform:`translateX(${Math.round((Math.random()-.5)*8*gi)}px)`,mixBlendMode:"screen"}}/><div className="absolute inset-0 z-30 pointer-events-none" style={{background:`repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,${.18*gi}) 2px,rgba(0,0,0,${.18*gi}) 4px)`}}/>{gi>.8&&<div className="absolute inset-0 z-30 pointer-events-none" style={{background:`rgba(255,215,0,${.35*gi})`}}/>}</>}
-              <div className="absolute left-0 right-0 border-t border-neutral-600/40" style={{top:GY,height:H-GY,background:"linear-gradient(180deg,#1e1e28 0%,#141418 100%)"}}/>
 
+        <div style={{display:"grid",gridTemplateColumns:"1fr 260px",gap:16}}>
+          {/* Arena */}
+          <div style={{border:"1px solid rgba(192,24,80,.15)",borderRadius:12,background:"rgba(0,0,0,.3)",padding:10,overflow:"hidden"}}>
+            <div className="relative" style={{
+              width:"100%",height:H,borderRadius:8,overflow:"hidden",position:"relative",
+              background:"linear-gradient(180deg,#0a0a0f 0%,#0e0e16 60%,#141420 100%)",
+              border:"1px solid rgba(0,136,160,.1)",
+              transform:`translate(${sh.x}px,${sh.y}px)`,transition:ga?"none":"transform .1s ease-out"}}>
+              {/* Grid */}
+              <div style={{position:"absolute",inset:0,opacity:.06,backgroundImage:"linear-gradient(rgba(0,136,160,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(0,136,160,.3) 1px,transparent 1px)",backgroundSize:"40px 40px"}}/>
+              {/* Glitch overlays */}
+              {ga&&<><div style={{position:"absolute",inset:0,zIndex:30,pointerEvents:"none",background:`rgba(192,24,80,${.1*gi})`,transform:`translateX(${Math.round((Math.random()-.5)*10*gi)}px)`,mixBlendMode:"screen"}}/><div style={{position:"absolute",inset:0,zIndex:30,pointerEvents:"none",background:`rgba(0,136,160,${.07*gi})`,transform:`translateX(${Math.round((Math.random()-.5)*8*gi)}px)`,mixBlendMode:"screen"}}/><div style={{position:"absolute",inset:0,zIndex:30,pointerEvents:"none",background:`repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,${.18*gi}) 2px,rgba(0,0,0,${.18*gi}) 4px)`}}/>{gi>.8&&<div style={{position:"absolute",inset:0,zIndex:30,pointerEvents:"none",background:`rgba(255,215,0,${.35*gi})`}}/>}</>}
+              {/* Ground */}
+              <div style={{position:"absolute",left:0,right:0,top:GY,height:H-GY,background:"linear-gradient(180deg,#16161e 0%,#0e0e14 100%)",borderTop:"1px solid rgba(0,136,160,.15)"}}/>
+
+              {/* Super claw */}
               {sc&&sc.active&&(
-                <div className="absolute z-10" style={{left:sc.x,top:sc.y,width:SS,height:SS}}>
-                  <div className="absolute inset-[-14px] rounded-full" style={{background:"radial-gradient(circle,rgba(255,215,0,.3) 0%,rgba(255,215,0,.08) 50%,transparent 70%)",animation:"sPulse 1.2s ease-in-out infinite"}}/>
-                  <div className="absolute left-1/2 -translate-x-1/2" style={{width:4,height:100,bottom:0,background:"linear-gradient(180deg,transparent 0%,rgba(255,215,0,.12) 30%,rgba(255,215,0,.35) 100%)"}}/>
-                  <div className="absolute inset-0 flex items-center justify-center text-[42px] select-none" style={{filter:"brightness(1.3) saturate(1.5) sepia(.6) hue-rotate(-10deg) drop-shadow(0 0 10px rgba(255,215,0,.8))",animation:"sBob 1s ease-in-out infinite"}}>🦞</div>
-                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] uppercase tracking-[.25em] font-bold" style={{color:"#ffd700",textShadow:"0 0 8px rgba(255,215,0,.5)"}}>SUPER</div>
+                <div style={{position:"absolute",zIndex:10,left:sc.x,top:sc.y,width:SS,height:SS}}>
+                  <div style={{position:"absolute",inset:-14,borderRadius:"50%",background:"radial-gradient(circle,rgba(255,215,0,.3) 0%,rgba(255,215,0,.08) 50%,transparent 70%)",animation:"sPulse 1.2s ease-in-out infinite"}}/>
+                  <div style={{position:"absolute",left:"50%",transform:"translateX(-50%)",width:4,height:100,bottom:0,background:"linear-gradient(180deg,transparent 0%,rgba(255,215,0,.12) 30%,rgba(255,215,0,.35) 100%)"}}/>
+                  <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:42,userSelect:"none",filter:"brightness(1.3) saturate(1.5) sepia(.6) hue-rotate(-10deg) drop-shadow(0 0 10px rgba(255,215,0,.8))",animation:"sBob 1s ease-in-out infinite"}}>🦞</div>
+                  <div style={{position:"absolute",top:-18,left:"50%",transform:"translateX(-50%)",whiteSpace:"nowrap",fontSize:9,textTransform:"uppercase",letterSpacing:".25em",fontWeight:700,color:"#ffd700",textShadow:"0 0 8px rgba(255,215,0,.5)"}}>SUPER</div>
                 </div>
               )}
 
+              {/* Explosion claws */}
               {ex.map((c,i)=>(
-                <div key={`ex${i}`} className="absolute select-none pointer-events-none z-20" style={{
+                <div key={`ex${i}`} style={{position:"absolute",userSelect:"none",pointerEvents:"none",zIndex:20,
                   left:c.x-c.sz/2,top:c.y-c.sz/2,width:c.sz,height:c.sz,
                   opacity:Math.min(1,c.life*2.5),transform:`rotate(${c.rot}deg)`,
                   fontSize:c.sz*.8,lineHeight:`${c.sz}px`,textAlign:"center",
                   filter:`brightness(${1+c.life}) saturate(${1+c.life}) sepia(${c.life*.5}) hue-rotate(-10deg) drop-shadow(0 0 ${c.life*8}px rgba(255,215,0,${c.life}))`}}>🦞</div>
               ))}
 
+              {/* Bullets */}
               {bu.map(b=>(
-                <div key={b.id} className="absolute" style={{left:b.x-(b.kind==="claw"?13:18),top:b.y-(b.kind==="claw"?13:10)}}>
-                  {b.kind==="claw"?<span className="text-[25px] inline-block select-none" style={{transform:`rotate(${b.rot}deg)`}}>🦞</span>
+                <div key={b.id} style={{position:"absolute",left:b.x-(b.kind==="claw"?13:18),top:b.y-(b.kind==="claw"?13:10)}}>
+                  {b.kind==="claw"?<span style={{fontSize:25,display:"inline-block",userSelect:"none",transform:`rotate(${b.rot}deg)`}}>🦞</span>
                   :<SpriteCanvas sprite={PP_SPRITE} palette={PP_PALETTE} ps={PPS} flipX={b.dir===-1} style={{position:"relative",zIndex:2}}/>}
                 </div>
               ))}
 
+              {/* Enemies */}
               {en.map(e=>{const v=e.phase==="reloading",fp=pl.x+PW/2>e.x+EW/2;return(
-                <div key={e.id} className="absolute" style={{left:e.x,top:e.y,width:EW,height:EH}}>
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] px-2 py-0.5 rounded-full border bg-neutral-950/90" style={{borderColor:v?"#34d399":"#fb923c"}}>{e.name}</div>
-                  <SpriteCanvas sprite={MONKEY_SPRITE} palette={MONKEY_PALETTE} ps={MPS} flipX={!fp} style={{position:"absolute",left:0,top:0,filter:v?"drop-shadow(0 0 6px rgba(52,211,153,.4))":"drop-shadow(0 0 4px rgba(251,146,60,.2))"}}/>
-                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-[.2em] whitespace-nowrap" style={{color:v?"#34d399":"#fb923c"}}>{v?"Перезарядка":"Стреляет"}</div>
-                  {v&&<div className="absolute inset-0 rounded-md border border-emerald-400/30" style={{boxShadow:"0 0 16px rgba(52,211,153,.15)"}}/>}
+                <div key={e.id} style={{position:"absolute",left:e.x,top:e.y,width:EW,height:EH}}>
+                  <div style={{position:"absolute",top:-24,left:"50%",transform:"translateX(-50%)",whiteSpace:"nowrap",fontSize:10,padding:"2px 8px",borderRadius:4,border:`1px solid ${v?"#0088a0":"#c01850"}`,background:"rgba(0,0,0,.85)",color:v?"#0088a0":"rgba(255,255,255,.6)",letterSpacing:".05em"}}>{e.name}</div>
+                  <SpriteCanvas sprite={MONKEY_SPRITE} palette={MONKEY_PALETTE} ps={MPS} flipX={!fp} style={{position:"absolute",left:0,top:0,filter:v?"drop-shadow(0 0 6px rgba(0,136,160,.4))":"drop-shadow(0 0 4px rgba(192,24,80,.2))"}}/>
+                  <div style={{position:"absolute",bottom:-16,left:"50%",transform:"translateX(-50%)",fontSize:9,textTransform:"uppercase",letterSpacing:".2em",whiteSpace:"nowrap",color:v?"#0088a0":"#c01850"}}>{v?"Reloading":"Firing"}</div>
+                  {v&&<div style={{position:"absolute",inset:0,borderRadius:4,border:"1px solid rgba(0,136,160,.3)",boxShadow:"0 0 16px rgba(0,136,160,.12)"}}/>}
                 </div>);})}
 
-              <div className="absolute" style={{left:pl.x,top:pl.y,width:PW,height:PH,opacity:pl.inv>0?(Math.floor(Date.now()/100)%2?.35:1):1}}>
-                <SpriteCanvas sprite={NEO_SPRITE} palette={NEO_PALETTE} ps={NPS} flipX={pl.f===-1} style={{position:"absolute",left:0,top:0,filter:"drop-shadow(0 0 6px rgba(214,51,132,.25))"}}/>
-                {pl.at>0&&<span className="absolute text-[18px] select-none" style={{top:36,[pl.f===1?"right":"left"]:-16}}>🦞</span>}
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[9px] tracking-[.22em] uppercase whitespace-nowrap" style={{color:"#67e8f9",textShadow:"0 0 8px rgba(103,232,249,.3)"}}>open//neo</div>
+              {/* Player */}
+              <div style={{position:"absolute",left:pl.x,top:pl.y,width:PW,height:PH,opacity:pl.inv>0?(Math.floor(Date.now()/100)%2?.35:1):1}}>
+                <SpriteCanvas sprite={NEO_SPRITE} palette={NEO_PALETTE} ps={NPS} flipX={pl.f===-1} style={{position:"absolute",left:0,top:0,filter:"drop-shadow(0 0 6px rgba(192,24,80,.25))"}}/>
+                {pl.at>0&&<span style={{position:"absolute",fontSize:18,userSelect:"none",top:36,[pl.f===1?"right":"left"]:-16}}>🦞</span>}
+                <div style={{position:"absolute",bottom:-14,left:"50%",transform:"translateX(-50%)",fontSize:9,letterSpacing:".22em",textTransform:"uppercase",whiteSpace:"nowrap",color:"#0088a0",textShadow:"0 0 8px rgba(0,136,160,.3)"}}>open//neo</div>
               </div>
 
+              {/* Win / Lose overlays */}
               {(gs==="won"||gs==="lost")&&(
-                <div className="absolute inset-0 bg-black/80 flex items-center justify-center p-6 z-20">
-                  <div className="w-full max-w-md bg-neutral-950 border border-neutral-700 rounded-2xl p-8 text-center space-y-5">
-                    {gs==="won"?<><div className="text-5xl">🎁</div><h2 className="text-3xl font-bold">Поздравляем!</h2><p className="text-neutral-300">open//neo уничтожил 15 обезьян.</p><div className="text-5xl font-black tracking-tight text-emerald-400">СКИДКА 15%</div><div className="text-neutral-400">Промокод: OPENNEO15</div></>:<>
-                    <h2 className="text-3xl font-bold text-red-400">Game Over</h2>
-                    <div className="relative mx-auto" style={{width:160,height:200}}>
-                      {/* Neo sprite centered */}
-                      <div className="absolute" style={{left:50,top:10,zIndex:2}}>
-                        <SpriteCanvas sprite={NEO_SPRITE} palette={NEO_PALETTE} ps={1.4} style={{width:Math.ceil(26*1.4),height:Math.ceil(46*1.4)}}/>
-                      </div>
-                      {/* Projectiles piled around Neo up to neck */}
-                      {[
-                        {x:15,y:140,r:-30,s:2.2},{x:55,y:148,r:15,s:2},{x:90,y:135,r:-10,s:2.3},{x:120,y:142,r:25,s:2},
-                        {x:5,y:115,r:40,s:2.1},{x:40,y:120,r:-20,s:2},{x:75,y:125,r:5,s:2.2},{x:110,y:118,r:-35,s:2.1},{x:135,y:122,r:18,s:2},
-                        {x:20,y:95,r:-15,s:2},{x:55,y:100,r:30,s:2.1},{x:85,y:98,r:-25,s:2},{x:115,y:102,r:10,s:2.2},
-                        {x:10,y:72,r:22,s:1.9},{x:48,y:78,r:-8,s:2},{x:80,y:75,r:35,s:2.1},{x:112,y:80,r:-20,s:1.9},{x:130,y:70,r:12,s:2},
-                        {x:28,y:52,r:-28,s:1.8},{x:60,y:55,r:15,s:1.9},{x:92,y:50,r:-5,s:2},{x:118,y:58,r:28,s:1.8},
-                      ].map((p,i)=>(
-                        <div key={`pp${i}`} className="absolute" style={{left:p.x,top:p.y,transform:`rotate(${p.r}deg)`,zIndex:p.y>90?3:1,opacity:0.9}}>
-                          <SpriteCanvas sprite={PP_SPRITE} palette={PP_PALETTE} ps={p.s} style={{width:Math.ceil(18*p.s),height:Math.ceil(10*p.s)}}/>
-                        </div>
-                      ))}
+                <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.85)",display:"flex",alignItems:"center",justifyContent:"center",padding:24,zIndex:40}}>
+                  {gs==="won"?(
+                    <div style={{width:"100%",maxWidth:420,padding:32,textAlign:"center",border:"1px solid rgba(0,136,160,.2)",borderRadius:12,background:"linear-gradient(180deg,rgba(0,136,160,.05) 0%,rgba(10,10,15,.95) 40%)"}}>
+                      <div style={{fontSize:11,letterSpacing:".25em",color:"#0088a0",textTransform:"uppercase",marginBottom:12}}>// victory</div>
+                      <div style={{fontSize:48}}>🎁</div>
+                      <h2 style={{fontSize:28,fontWeight:800,color:"#fff",margin:"12px 0 8px",letterSpacing:".04em"}}>You <span style={{color:"#0088a0"}}>won</span></h2>
+                      <p style={{fontSize:13,color:"rgba(255,255,255,.5)"}}>open//neo destroyed 15 task monkeys.</p>
+                      <div style={{fontSize:40,fontWeight:900,letterSpacing:".06em",color:"#0088a0",margin:"16px 0 8px",textShadow:"0 0 20px rgba(0,136,160,.3)"}}>15% OFF</div>
+                      <div style={{fontSize:13,color:"rgba(255,255,255,.4)",letterSpacing:".1em"}}>Promo: OPENNEO15</div>
+                      <button onClick={reset} style={{marginTop:20,padding:"12px 32px",fontSize:13,fontWeight:700,letterSpacing:".18em",textTransform:"uppercase",color:"#fff",background:"#0088a0",border:"none",borderRadius:8,cursor:"pointer",boxShadow:"0 0 24px rgba(0,136,160,.25)",fontFamily:F}}>Play again</button>
                     </div>
-                    <p className="text-neutral-300">open//neo потерял все 3 жизни.</p>
-                    </>}
-                    <button onClick={reset} className="mt-4 px-6 py-3 bg-white text-black font-bold rounded-xl hover:bg-neutral-200 transition-colors">↻ Играть ещё раз</button>
-                  </div>
+                  ):(
+                    <div style={{width:"100%",maxWidth:480,padding:32,textAlign:"center",border:"1px solid rgba(192,24,80,.15)",borderRadius:12,background:"linear-gradient(180deg,rgba(192,24,80,.04) 0%,rgba(10,10,15,.95) 40%)"}}>
+                      <div style={{fontSize:11,letterSpacing:".25em",color:"#0088a0",textTransform:"uppercase",marginBottom:12}}>// game over</div>
+                      <GlitchTitle/>
+                      {/* Pile */}
+                      <div style={{position:"relative",width:340,height:300,margin:"16px auto 12px",overflow:"hidden"}}>
+                        <div style={{position:"absolute",bottom:0,left:"50%",transform:"translateX(-50%)",width:330,height:50,background:"radial-gradient(ellipse at center,rgba(192,24,80,.12) 0%,transparent 70%)",borderRadius:"50%"}}/>
+                        {PILE.map((p,i)=>(
+                          <div key={i} style={{position:"absolute",left:p.x,top:p.y,transform:`rotate(${p.r}deg)`,zIndex:Math.floor(p.y/8),opacity:.92}}>
+                            <SpriteCanvas sprite={PP_SPRITE} palette={PP_PALETTE} ps={p.s} flipX={!!p.f} style={{width:Math.ceil(18*p.s),height:Math.ceil(10*p.s)}}/>
+                          </div>
+                        ))}
+                        <div style={{position:"absolute",left:"50%",top:10,transform:"translateX(-50%)",zIndex:200,filter:"drop-shadow(0 3px 8px rgba(0,0,0,.7))"}}>
+                          <SpriteCanvas sprite={NEO_HEAD} palette={NEO_PALETTE} ps={4.2} style={{width:Math.ceil(26*4.2),height:Math.ceil(19*4.2)}}/>
+                        </div>
+                      </div>
+                      <p style={{fontSize:14,color:"rgba(255,255,255,.5)",letterSpacing:".04em"}}>The monkey work won this round.</p>
+                      <button onClick={reset} style={{marginTop:20,padding:"14px 36px",fontSize:13,fontWeight:700,letterSpacing:".18em",textTransform:"uppercase",color:"#fff",background:"#c01850",border:"none",borderRadius:8,cursor:"pointer",boxShadow:"0 0 24px rgba(192,24,80,.25)",fontFamily:F}}>Try again</button>
+                      <div style={{marginTop:14,fontSize:10,color:"rgba(255,255,255,.15)",letterSpacing:".2em",textTransform:"uppercase"}}>[ press R to restart ]</div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="space-y-3">
-            <div className="bg-neutral-900/90 border border-neutral-800 rounded-2xl p-4 space-y-3">
-              <div className="flex items-center justify-between text-sm"><span className="text-neutral-400">Прогресс</span><span className="font-bold">{kills}/{WK}</span></div>
-              <div className="h-3 rounded-full bg-neutral-800 overflow-hidden border border-neutral-700"><div className="h-full rounded-full transition-all duration-300" style={{width:`${prog}%`,background:"linear-gradient(90deg,#ec4899,#34d399,#67e8f9)"}}/></div>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-xl border border-neutral-800 p-2 bg-neutral-950/70"><div className="text-[10px] text-neutral-400 uppercase">Фраги</div><div className="text-xl font-bold">{kills}</div></div>
-                <div className="rounded-xl border border-neutral-800 p-2 bg-neutral-950/70"><div className="text-[10px] text-neutral-400 uppercase">Жизни</div><div className="text-xl font-bold text-red-400">{"♥".repeat(lives)}{"♡".repeat(ML-lives)}</div></div>
-                <div className="rounded-xl border border-neutral-800 p-2 bg-neutral-950/70"><div className="text-[10px] text-neutral-400 uppercase">Статус</div><div className="text-sm font-bold mt-1" style={{color:gs==="playing"?"#67e8f9":gs==="won"?"#34d399":"#f87171"}}>{gs==="playing"?"В бою":gs==="won"?"Победа":"Поражение"}</div></div>
+          {/* Sidebar */}
+          <div style={{display:"flex",flexDirection:"column",gap:12}}>
+            {/* Progress */}
+            <div style={{border:"1px solid rgba(0,136,160,.15)",borderRadius:12,padding:16,background:"rgba(0,0,0,.2)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:8}}>
+                <span style={{color:"rgba(255,255,255,.4)",letterSpacing:".1em",textTransform:"uppercase"}}>Mission</span>
+                <span style={{fontWeight:700}}>{kills}/{WK}</span>
+              </div>
+              <div style={{height:10,borderRadius:6,background:"rgba(0,0,0,.3)",overflow:"hidden",border:"1px solid rgba(0,136,160,.15)"}}>
+                <div style={{height:"100%",borderRadius:6,transition:"width .3s",width:`${prog}%`,background:"linear-gradient(90deg,#c01850,#0088a0)"}}/>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginTop:12,textAlign:"center"}}>
+                <div style={{borderRadius:8,border:"1px solid rgba(0,136,160,.1)",padding:8,background:"rgba(0,0,0,.2)"}}>
+                  <div style={{fontSize:9,color:"rgba(255,255,255,.3)",textTransform:"uppercase",letterSpacing:".15em"}}>Kills</div>
+                  <div style={{fontSize:20,fontWeight:700,marginTop:2}}>{kills}</div>
+                </div>
+                <div style={{borderRadius:8,border:"1px solid rgba(0,136,160,.1)",padding:8,background:"rgba(0,0,0,.2)"}}>
+                  <div style={{fontSize:9,color:"rgba(255,255,255,.3)",textTransform:"uppercase",letterSpacing:".15em"}}>Lives</div>
+                  <div style={{fontSize:18,fontWeight:700,marginTop:2,color:"#c01850"}}>{"♥".repeat(lives)}{"♡".repeat(ML-lives)}</div>
+                </div>
+                <div style={{borderRadius:8,border:"1px solid rgba(0,136,160,.1)",padding:8,background:"rgba(0,0,0,.2)"}}>
+                  <div style={{fontSize:9,color:"rgba(255,255,255,.3)",textTransform:"uppercase",letterSpacing:".15em"}}>Status</div>
+                  <div style={{fontSize:12,fontWeight:700,marginTop:4,color:gs==="playing"?"#0088a0":gs==="won"?"#0088a0":"#c01850"}}>{gs==="playing"?"Fighting":gs==="won"?"Victory":"Defeated"}</div>
+                </div>
               </div>
             </div>
-            <div className="bg-neutral-900/90 border border-neutral-800 rounded-2xl p-4 space-y-2">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-300">Правила</h3>
-              <div className="text-xs text-neutral-400 space-y-1.5 leading-5">
-                <p>1. Обезьяны стреляют в open//neo.</p>
-                <p>2. Убить обезьяну можно только в <span className="text-emerald-400">«Перезарядку»</span>.</p>
-                <p>3. У open//neo 3 жизни.</p>
-                <p>4. Победа — 15 убитых обезьян.</p>
-                <p>5. <span style={{color:"#ffd700"}}>Золотая клешня</span> — суперудар, убивает всех!</p>
+
+            {/* Rules */}
+            <div style={{border:"1px solid rgba(0,136,160,.15)",borderRadius:12,padding:16,background:"rgba(0,0,0,.2)"}}>
+              <div style={{fontSize:11,letterSpacing:".2em",color:"#0088a0",textTransform:"uppercase",marginBottom:10}}>// Rules</div>
+              <div style={{fontSize:12,color:"rgba(255,255,255,.4)",lineHeight:1.8}}>
+                <p>1. Monkeys shoot at open//neo</p>
+                <p>2. Kill them only during <span style={{color:"#0088a0"}}>Reload</span></p>
+                <p>3. You have 3 lives</p>
+                <p>4. Kill 15 monkeys to win</p>
+                <p>5. <span style={{color:"#ffd700"}}>Golden claw</span> = kill all</p>
               </div>
             </div>
-            <div className="bg-neutral-900/90 border border-neutral-800 rounded-2xl p-4"><h3 className="text-sm font-bold uppercase tracking-wider text-neutral-300 mb-2">Подсказка</h3><p className="text-xs text-neutral-400 leading-5">{msg}</p></div>
-            <div className="bg-neutral-900/90 border border-neutral-800 rounded-2xl p-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-300 mb-3">Персонажи</h3>
-              <div className="flex items-center gap-3 mb-3"><SpriteCanvas sprite={NEO_SPRITE} palette={NEO_PALETTE} ps={1} style={{width:26,height:46}}/><div><div className="text-xs font-bold text-cyan-300">open//neo</div><div className="text-[10px] text-neutral-500">Герой. Мечет клешню 🦞</div></div></div>
-              <div className="flex items-center gap-3 mb-3"><SpriteCanvas sprite={MONKEY_SPRITE} palette={MONKEY_PALETTE} ps={1} style={{width:28,height:28}}/><div><div className="text-xs font-bold text-orange-300">Claw Monkey</div><div className="text-[10px] text-neutral-500">Враг. Стреляет задачами</div></div></div>
-              <div className="flex items-center gap-3"><div className="flex items-center justify-center" style={{width:28,height:28,filter:"sepia(.6) hue-rotate(-10deg) brightness(1.3) saturate(1.5)",fontSize:22}}>🦞</div><div><div className="text-xs font-bold" style={{color:"#ffd700"}}>Золотая клешня</div><div className="text-[10px] text-neutral-500">Суперудар. Убивает всех</div></div></div>
+
+            {/* Hint */}
+            <div style={{border:"1px solid rgba(192,24,80,.1)",borderRadius:12,padding:16,background:"rgba(0,0,0,.2)"}}>
+              <div style={{fontSize:11,letterSpacing:".2em",color:"#c01850",textTransform:"uppercase",marginBottom:8}}>// Hint</div>
+              <p style={{fontSize:12,color:"rgba(255,255,255,.35)",lineHeight:1.6}}>{msg}</p>
+            </div>
+
+            {/* Legend */}
+            <div style={{border:"1px solid rgba(0,136,160,.1)",borderRadius:12,padding:16,background:"rgba(0,0,0,.2)"}}>
+              <div style={{fontSize:11,letterSpacing:".2em",color:"#0088a0",textTransform:"uppercase",marginBottom:12}}>// Characters</div>
+              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+                <SpriteCanvas sprite={NEO_SPRITE} palette={NEO_PALETTE} ps={1} style={{width:26,height:46}}/>
+                <div><div style={{fontSize:12,fontWeight:700,color:"#0088a0"}}>open//neo</div><div style={{fontSize:10,color:"rgba(255,255,255,.3)"}}>Hero. Throws claw 🦞</div></div>
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+                <SpriteCanvas sprite={MONKEY_SPRITE} palette={MONKEY_PALETTE} ps={1} style={{width:28,height:28}}/>
+                <div><div style={{fontSize:12,fontWeight:700,color:"#c01850"}}>Task Monkey</div><div style={{fontSize:10,color:"rgba(255,255,255,.3)"}}>Enemy. Shoots tasks</div></div>
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:10}}>
+                <div style={{width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",filter:"sepia(.6) hue-rotate(-10deg) brightness(1.3) saturate(1.5)",fontSize:22}}>🦞</div>
+                <div><div style={{fontSize:12,fontWeight:700,color:"#ffd700"}}>Golden Claw</div><div style={{fontSize:10,color:"rgba(255,255,255,.3)"}}>Super strike. Kills all</div></div>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Footer */}
+        <div style={{marginTop:16,textAlign:"center",fontSize:10,color:"rgba(255,255,255,.1)",letterSpacing:".2em",textTransform:"uppercase"}}>
+          [ open//neo vs monkey work · openclaw ]
         </div>
       </div>
       <style>{`@keyframes sPulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.4);opacity:1}}@keyframes sBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}`}</style>
