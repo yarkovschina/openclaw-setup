@@ -487,87 +487,70 @@
 
         /* === SLOTS === */
         .slots-section { text-align: center; }
-        .slots-week-label {
+        .slots-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin: 0 auto 24px;
+            max-width: 400px;
+        }
+        .slots-number {
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem; font-weight: 700;
-            color: var(--muted); letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 12px; margin-top: 28px;
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--magenta);
+            text-shadow:
+                0 0 20px rgba(255, 45, 123, 0.6),
+                0 0 60px rgba(255, 45, 123, 0.3),
+                0 0 100px rgba(255, 45, 123, 0.15);
+            line-height: 1;
+            animation: slot-pulse 2s ease-in-out infinite;
         }
-        .slots-week-label:first-of-type { margin-top: 0; }
-        .slots-grid {
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
-            max-width: 600px; margin: 0 auto;
+        @keyframes slot-pulse {
+            0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(255,45,123,0.6), 0 0 60px rgba(255,45,123,0.3); }
+            50% { opacity: 0.8; text-shadow: 0 0 30px rgba(255,45,123,0.8), 0 0 80px rgba(255,45,123,0.4); }
         }
-        .slot-col {
-            display: flex; flex-direction: column; gap: 4px;
-        }
-        .slot-col-header {
+        .slots-label {
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.65rem; font-weight: 700;
+            font-size: 0.85rem;
+            font-weight: 700;
             color: var(--text);
-            padding: 8px 4px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 4px;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1.5;
         }
-        .slot-col-date {
-            font-size: 0.6rem;
+        .slots-label span {
+            display: block;
             color: var(--muted);
+            font-size: 0.7rem;
             font-weight: 400;
         }
-        .ts {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 6px 4px;
-            font-size: 0.65rem;
-            color: var(--muted);
-            transition: all 0.25s;
+        .slots-bar {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 28px;
         }
-        .ts.taken {
-            opacity: 0.3;
+        .slots-bar-seg {
+            width: 48px;
+            height: 6px;
+            border-radius: 1px;
         }
-        .ts.taken .ts-status {
-            color: var(--magenta);
-            font-size: 0.55rem;
+        .slots-bar-seg.taken {
+            background: var(--magenta);
+            box-shadow: 0 0 8px rgba(255, 45, 123, 0.4);
         }
-        .ts.available {
-            border-color: rgba(0, 200, 212, 0.3);
-            cursor: pointer;
-            display: block;
-            text-decoration: none;
+        .slots-bar-seg.open {
+            background: var(--cyan);
+            box-shadow: 0 0 8px rgba(0, 200, 212, 0.4);
+            animation: seg-blink 1.5s ease-in-out infinite;
         }
-        .ts.available .ts-time {
-            color: var(--cyan);
-            text-shadow: 0 0 8px rgba(0, 200, 212, 0.4);
-            font-weight: 700;
-        }
-        .ts.available .ts-status {
-            color: var(--cyan);
-            font-size: 0.55rem;
-        }
-        .ts.available:hover {
-            background: var(--cyan-glow);
-            border-color: var(--cyan);
-            box-shadow: 0 0 20px rgba(0, 200, 212, 0.15);
-        }
-        .ts-time { font-size: 0.7rem; }
-        .slots-tz {
-            font-size: 0.65rem;
-            color: var(--muted);
-            margin-top: 16px;
-            letter-spacing: 0.1em;
-        }
-        .slots-note {
-            font-size: 0.75rem;
-            color: var(--muted);
-            margin-top: 10px;
-        }
-        .slots-note strong {
-            color: var(--magenta);
-            text-shadow: 0 0 6px rgba(255, 45, 123, 0.3);
-        }
-        @media (max-width: 768px) {
-            .slots-grid { grid-template-columns: repeat(3, 1fr); }
+        .slots-bar-seg.open:nth-child(4) { animation-delay: 0.3s; }
+        @keyframes seg-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
 
         /* === FAQ === */
@@ -908,7 +891,8 @@
             <div class="section-title" style="text-align:center;">Two <span class="accent">options</span></div>
             <div class="section-desc" style="text-align:center; margin: 0 auto 32px;">Pick what you need. No hidden fees, no subscriptions</div>
             <div class="pricing-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 560px; margin: 0 auto;">
-                <div class="price-card">
+                <div class="price-card featured">
+                    <div class="price-badge">// MOST POPULAR</div>
                     <div class="price-name">Install</div>
                     <div class="price-amount"><span class="currency">$</span>99</div>
                     <div class="price-note">one-time</div>
@@ -923,8 +907,7 @@
                     </ul>
                     <a href="https://t.me/iaroslav" class="btn-primary" style="display:block;text-align:center;">Get installed</a>
                 </div>
-                <div class="price-card featured">
-                    <div class="price-badge">// FULL SERVICE</div>
+                <div class="price-card">
                     <div class="price-name">Custom Setup</div>
                     <div class="price-amount"><span class="currency">$</span>500+</div>
                     <div class="price-note">scope-dependent</div>
@@ -944,11 +927,21 @@
         <!-- SLOTS -->
         <section id="slots" class="slots-section">
             <h2>Availability</h2>
-            <div class="section-title" style="text-align:center;">Book your <span class="accent">install slot</span></div>
-            <div class="section-desc" style="text-align:center; margin: 0 auto 32px;">I work 08:00–20:00 BRT. Here's my schedule for the next two weeks</div>
-            <div id="slotsContainer"></div>
-            <div class="slots-tz">ALL TIMES IN BRT (UTC-3)</div>
-            <div class="slots-note">Only <strong>2 slots</strong> left &mdash; <a href="https://t.me/iaroslav" style="color: var(--cyan); text-decoration: none;">grab yours before they're gone</a></div>
+            <div class="slots-counter">
+                <div class="slots-number">2</div>
+                <div class="slots-label">
+                    install slots<br>left this week
+                    <span>out of 5 &mdash; going fast</span>
+                </div>
+            </div>
+            <div class="slots-bar">
+                <div class="slots-bar-seg taken"></div>
+                <div class="slots-bar-seg taken"></div>
+                <div class="slots-bar-seg taken"></div>
+                <div class="slots-bar-seg open"></div>
+                <div class="slots-bar-seg open"></div>
+            </div>
+            <a href="https://t.me/iaroslav" class="btn-primary">Grab a slot</a>
         </section>
 
         <!-- FAQ -->
@@ -1490,117 +1483,6 @@
             overlay.classList.remove('active');
             clear();
         }
-    })();
-
-    // === SCHEDULE SLOTS ===
-    (function() {
-        const container = document.getElementById('slotsContainer');
-        const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-        const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
-
-        // Get today and compute next two weeks of weekdays
-        const today = new Date();
-        const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
-
-        // Find next Monday (start of week 1)
-        const dayOfWeek = today.getDay(); // 0=Sun
-        const daysUntilMon = dayOfWeek === 0 ? 1 : (dayOfWeek === 6 ? 2 : (8 - dayOfWeek));
-        // Current week remaining + next week
-        // Let's collect next 10 business days starting from tomorrow
-        const allDays = [];
-        const d = new Date(today);
-        d.setDate(d.getDate() + 1); // start from tomorrow
-        while (allDays.length < 10) {
-            if (d.getDay() !== 0 && d.getDay() !== 6) {
-                allDays.push(new Date(d));
-            }
-            d.setDate(d.getDate() + 1);
-        }
-
-        // Split into two groups: this week's remaining and next week
-        const thisWeekEnd = new Date(today);
-        // find this Sunday
-        thisWeekEnd.setDate(today.getDate() + (7 - today.getDay()));
-        const week1 = allDays.filter(d => d <= thisWeekEnd);
-        const week2 = allDays.filter(d => d > thisWeekEnd);
-
-        // Free slots: tomorrow at 13:00 and next Wednesday at 18:00
-        // Tomorrow
-        const tomorrowStr = tomorrow.toDateString();
-        // Next Wednesday after this week
-        let nextWed = null;
-        for (const wd of week2) {
-            if (wd.getDay() === 3) { nextWed = wd; break; }
-        }
-        // If no wednesday in week2, check further
-        if (!nextWed) {
-            const extra = new Date(allDays[allDays.length - 1]);
-            while (extra.getDay() !== 3) extra.setDate(extra.getDate() + 1);
-            nextWed = extra;
-            if (!allDays.find(dd => dd.toDateString() === nextWed.toDateString())) {
-                allDays.push(nextWed);
-                week2.push(nextWed);
-            }
-        }
-        const nextWedStr = nextWed ? nextWed.toDateString() : '';
-
-        function isOpen(date, hour) {
-            const ds = date.toDateString();
-            if (ds === tomorrowStr && hour === 13) return true;
-            if (ds === nextWedStr && hour === 18) return true;
-            return false;
-        }
-
-        function renderWeek(days, label) {
-            const lbl = document.createElement('div');
-            lbl.className = 'slots-week-label';
-            lbl.textContent = label;
-            container.appendChild(lbl);
-
-            const grid = document.createElement('div');
-            grid.className = 'slots-grid';
-            grid.style.gridTemplateColumns = 'repeat(' + days.length + ', 1fr)';
-
-            for (const day of days) {
-                const col = document.createElement('div');
-                col.className = 'slot-col';
-
-                const header = document.createElement('div');
-                header.className = 'slot-col-header';
-                header.innerHTML = DAYS[day.getDay()] + '<br><span class="slot-col-date">' + MONTHS[day.getMonth()] + ' ' + day.getDate() + '</span>';
-                col.appendChild(header);
-
-                for (const h of hours) {
-                    const open = isOpen(day, h);
-                    if (open) {
-                        const a = document.createElement('a');
-                        a.href = 'https://t.me/iaroslav';
-                        a.className = 'ts available';
-                        a.innerHTML = '<div class="ts-time">' + h + ':00</div><div class="ts-status">open</div>';
-                        col.appendChild(a);
-                    } else {
-                        const slot = document.createElement('div');
-                        // After 14:00 always booked, before 14:00 randomly booked
-                        const booked = h >= 14 || Math.random() > 0.25;
-                        slot.className = 'ts taken';
-                        slot.innerHTML = '<div class="ts-time">' + h + ':00</div><div class="ts-status">' + (booked ? 'booked' : 'booked') + '</div>';
-                        col.appendChild(slot);
-                    }
-                }
-                grid.appendChild(col);
-            }
-            container.appendChild(grid);
-        }
-
-        const w1label = week1.length > 0 ? 'This week' : '';
-        const w2label = 'Next week';
-
-        if (week1.length > 0) renderWeek(week1, w1label);
-        if (week2.length > 0) renderWeek(week2, w2label);
-        // If we have leftover days beyond week2
-        const leftover = allDays.filter(d => !week1.includes(d) && !week2.includes(d));
-        if (leftover.length > 0) renderWeek(leftover, 'Week after');
     })();
 
     // Status bar click cycle
